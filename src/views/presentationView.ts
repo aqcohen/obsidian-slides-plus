@@ -125,22 +125,19 @@ export class PresentationView extends ItemView {
 
     const slide = this.deck.slides[this.currentIndex];
 
-    // Render the new slide into a temp container
-    const tempContainer = createDiv({ cls: "sp-slide-container" });
+    // Render the new slide into a container
+    const slideEl = createDiv({ cls: "sp-slide-container" });
     const component = await this.renderEngine.renderSlide(
       slide,
-      tempContainer,
+      slideEl,
       this.deck.globalConfig
     );
     this.slideComponents.push(component);
 
-    // Get the actual slide element (renderSlide creates it inside the container)
-    const slideEl = tempContainer;
-
     if (withTransition) {
       const transitionType =
         slide.frontmatter.transition || this.deck.globalConfig.transition;
-      await this.transitionEngine.transition(
+      this.transitionEngine.show(
         this.slideArea,
         slideEl,
         transitionType as TransitionType,

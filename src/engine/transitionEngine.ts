@@ -1,60 +1,66 @@
 import { TransitionType } from "../types";
 
 /**
- * Manages CSS-based slide transitions.
- * Transitions are pure CSS — no JS animation library needed.
+ * Manages slide transitions using CSS animations (keyframes).
+ *
+ * Uses animations instead of CSS transitions because:
+ * - No transitionend reliability issues (bubbling, missing events)
+ * - No race conditions with rapid navigation
+ * - Old slide removed immediately, no zombie elements
  */
 export class TransitionEngine {
   private currentSlideEl: HTMLElement | null = null;
+  private animatingEl: HTMLElement | null = null;
 
   /**
-   * Transition from the current slide to a new one.
-   * Returns a promise that resolves when the transition completes.
+   * Transition to a new slide. Removes old slide immediately,
+   * applies entry animation to the new slide.
    */
-  async transition(
+  show(
     container: HTMLElement,
     newSlideEl: HTMLElement,
     type: TransitionType,
     direction: "forward" | "backward"
-  ): Promise<void> {
-    const oldSlideEl = this.currentSlideEl;
-
-    if (!oldSlideEl || type === "none") {
-      // No transition: just swap
-      if (oldSlideEl) oldSlideEl.remove();
-      container.appendChild(newSlideEl);
-      this.currentSlideEl = newSlideEl;
-      return;
+  ): void {
+    // Cancel any running animation on previous element
+    if (this.animatingEl) {
+      this.animatingEl.getAnimations().forEach((a) => a.cancel());
+      this.animatingEl = null;
     }
 
-    // Set up transition classes
-    const transitionClass = `sp-transition-${type}`;
-    const dirClass = `sp-dir-${direction}`;
+    // Remove old slide immediately — no zombies
+    if (this.currentSlideEl) {
+      this.currentSlideEl.remove();
+    }
 
-    // Position new slide for entry
-    newSlideEl.addClass(transitionClass, dirClass, "sp-entering");
+    // Add new slide
     container.appendChild(newSlideEl);
-
-    // Force reflow so the initial position is applied
-    newSlideEl.offsetHeight;
-
-    // Start the transition
-    oldSlideEl.addClass(transitionClass, dirClass, "sp-leaving");
-    newSlideEl.removeClass("sp-entering");
-    newSlideEl.addClass("sp-active");
-
-    // Wait for transition to complete
-    await waitForTransition(newSlideEl);
-
-    // Clean up old slide
-    oldSlideEl.remove();
-    newSlideEl.removeClass(transitionClass, dirClass, "sp-active");
-
     this.currentSlideEl = newSlideEl;
+
+    if (type === "none") return;
+
+    // Apply entry animation
+    const animationClass = getAnimationClass(type, direction);
+    if (animationClass) {
+      newSlideEl.addClass(animationClass);
+      this.animatingEl = newSlideEl;
+
+      // Remove animation class when done so it doesn't interfere
+      newSlideEl.addEventListener(
+        "animationend",
+        () => {
+          newSlideEl.removeClass(animationClass);
+          if (this.animatingEl === newSlideEl) {
+            this.animatingEl = null;
+          }
+        },
+        { once: true }
+      );
+    }
   }
 
   /**
-   * Set a slide without transition (for initial render).
+   * Set a slide without any animation (initial render).
    */
   setImmediate(container: HTMLElement, slideEl: HTMLElement): void {
     if (this.currentSlideEl) this.currentSlideEl.remove();
@@ -63,19 +69,30 @@ export class TransitionEngine {
   }
 
   reset(): void {
+    if (this.animatingEl) {
+      this.animatingEl.getAnimations().forEach((a) => a.cancel());
+    }
     this.currentSlideEl = null;
+    this.animatingEl = null;
   }
 }
 
-function waitForTransition(el: HTMLElement): Promise<void> {
-  return new Promise((resolve) => {
-    const handler = () => {
-      el.removeEventListener("transitionend", handler);
-      resolve();
-    };
-    el.addEventListener("transitionend", handler);
-
-    // Fallback timeout in case transitionend doesn't fire
-    setTimeout(resolve, 600);
-  });
+function getAnimationClass(
+  type: TransitionType,
+  direction: "forward" | "backward"
+): string {
+  switch (type) {
+    case "slide":
+      return direction === "forward"
+        ? "sp-anim-slide-from-right"
+        : "sp-anim-slide-from-left";
+    case "fade":
+      return "sp-anim-fade-in";
+    case "slide-up":
+      return direction === "forward"
+        ? "sp-anim-slide-from-bottom"
+        : "sp-anim-slide-from-top";
+    default:
+      return "";
+  }
 }

@@ -370,70 +370,52 @@
 }
 
 /* ============================================================
-   Transitions
+   Transitions (CSS keyframe animations)
    ============================================================ */
 
-/* Slide left/right */
-.sp-transition-slide {
-  transition: transform var(--sp-transition-duration) ease;
-  position: absolute;
-  inset: 0;
+/* Slide from right (forward navigation) */
+.sp-anim-slide-from-right {
+  animation: sp-slide-from-right var(--sp-transition-duration) ease both;
+}
+@keyframes sp-slide-from-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
 }
 
-.sp-transition-slide.sp-dir-forward.sp-entering {
-  transform: translateX(100%);
+/* Slide from left (backward navigation) */
+.sp-anim-slide-from-left {
+  animation: sp-slide-from-left var(--sp-transition-duration) ease both;
 }
-.sp-transition-slide.sp-dir-backward.sp-entering {
-  transform: translateX(-100%);
-}
-.sp-transition-slide.sp-active {
-  transform: translateX(0);
-}
-.sp-transition-slide.sp-dir-forward.sp-leaving {
-  transform: translateX(-100%);
-}
-.sp-transition-slide.sp-dir-backward.sp-leaving {
-  transform: translateX(100%);
+@keyframes sp-slide-from-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
 }
 
-/* Fade */
-.sp-transition-fade {
-  transition: opacity var(--sp-transition-duration) ease;
-  position: absolute;
-  inset: 0;
+/* Fade in */
+.sp-anim-fade-in {
+  animation: sp-fade-in var(--sp-transition-duration) ease both;
+}
+@keyframes sp-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-.sp-transition-fade.sp-entering {
-  opacity: 0;
+/* Slide from bottom (slide-up forward) */
+.sp-anim-slide-from-bottom {
+  animation: sp-slide-from-bottom var(--sp-transition-duration) ease both;
 }
-.sp-transition-fade.sp-active {
-  opacity: 1;
-}
-.sp-transition-fade.sp-leaving {
-  opacity: 0;
-}
-
-/* Slide up */
-.sp-transition-slide-up {
-  transition: transform var(--sp-transition-duration) ease;
-  position: absolute;
-  inset: 0;
+@keyframes sp-slide-from-bottom {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
 }
 
-.sp-transition-slide-up.sp-dir-forward.sp-entering {
-  transform: translateY(100%);
+/* Slide from top (slide-up backward) */
+.sp-anim-slide-from-top {
+  animation: sp-slide-from-top var(--sp-transition-duration) ease both;
 }
-.sp-transition-slide-up.sp-dir-backward.sp-entering {
-  transform: translateY(-100%);
-}
-.sp-transition-slide-up.sp-active {
-  transform: translateY(0);
-}
-.sp-transition-slide-up.sp-dir-forward.sp-leaving {
-  transform: translateY(-100%);
-}
-.sp-transition-slide-up.sp-dir-backward.sp-leaving {
-  transform: translateY(100%);
+@keyframes sp-slide-from-top {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(0); }
 }
 
 /* ============================================================
