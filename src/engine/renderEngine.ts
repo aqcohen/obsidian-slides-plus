@@ -2,6 +2,9 @@ import { Component, MarkdownRenderer } from "obsidian";
 import type { App } from "obsidian";
 import { Slide, SlideFrontmatter, DeckConfig } from "../types";
 import { getLayoutClass, renderSlots } from "./layoutEngine";
+import { ensureMathRendered } from "../integrations/latexRenderer";
+import { ensureMermaidRendered } from "../integrations/mermaidRenderer";
+import { renderExcalidrawFallback } from "../integrations/excalidrawEmbed";
 
 /**
  * Renders a Slide into a DOM element using Obsidian's MarkdownRenderer.
@@ -79,6 +82,9 @@ export class SlideRenderEngine {
       img.addClass("sp-layout-image");
     }
 
+    // Post-render integration hooks (fallbacks for custom views)
+    await this.runPostRenderHooks(slideEl);
+
     return component;
   }
 
@@ -111,6 +117,16 @@ export class SlideRenderEngine {
       this.sourcePath,
       component
     );
+  }
+
+  private async runPostRenderHooks(container: HTMLElement): Promise<void> {
+    // Give MarkdownRenderer.render() a tick to finish post-processing
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // Fallback: ensure math, mermaid, and excalidraw render in custom views
+    await ensureMathRendered(container);
+    await ensureMermaidRendered(container);
+    await renderExcalidrawFallback(this.app, container);
   }
 
   private applyBackground(

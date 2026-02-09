@@ -23,6 +23,9 @@ export class PresentationView extends ItemView {
   private slideComponents: Component[] = [];
   private boundKeyHandler: (e: KeyboardEvent) => void;
 
+  /** Callback for external sync (e.g., presenter view) */
+  onSlideChange: ((index: number) => void) | null = null;
+
   constructor(leaf: WorkspaceLeaf) {
     super(leaf);
     this.transitionEngine = new TransitionEngine();
@@ -111,6 +114,7 @@ export class PresentationView extends ItemView {
 
     this.currentIndex = newIndex;
     await this.renderCurrentSlide(true, delta > 0 ? "forward" : "backward");
+    this.onSlideChange?.(this.currentIndex);
   }
 
   private async renderCurrentSlide(
@@ -189,6 +193,7 @@ export class PresentationView extends ItemView {
     const direction = index > this.currentIndex ? "forward" : "backward";
     this.currentIndex = index;
     await this.renderCurrentSlide(true, direction);
+    this.onSlideChange?.(this.currentIndex);
   }
 
   private updateProgressBar(): void {

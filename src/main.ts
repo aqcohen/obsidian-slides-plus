@@ -8,6 +8,7 @@ import { parseDeck, getSlideIndexAtLine } from "./parser/slideParser";
 import { PreviewPanel } from "./views/previewPanel";
 import { PresentationView } from "./views/presentationView";
 import { PresenterView } from "./views/presenterView";
+import { SlideNavigator, NAVIGATOR_VIEW_TYPE } from "./views/slideNavigator";
 import { PdfExporter } from "./export/pdfExporter";
 import { slideSeparatorPlugin } from "./editor/slideDecorations";
 import {
@@ -34,6 +35,10 @@ export default class SlidesPlugin extends Plugin {
     this.registerView(
       PRESENTER_VIEW_TYPE,
       (leaf) => new PresenterView(leaf)
+    );
+    this.registerView(
+      NAVIGATOR_VIEW_TYPE,
+      (leaf) => new SlideNavigator(leaf)
     );
 
     // Register editor extension for slide separator decorations
@@ -131,6 +136,18 @@ export default class SlidesPlugin extends Plugin {
       },
     });
 
+    this.addCommand({
+      id: "open-navigator",
+      name: "Open slide navigator",
+      checkCallback: (checking) => {
+        const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+        if (!view) return false;
+        if (checking) return true;
+        this.openNavigator();
+        return true;
+      },
+    });
+
     // Ribbon icon
     this.addRibbonIcon("presentation", "Slides Plus", () => {
       const view = this.app.workspace.getActiveViewOfType(MarkdownView);
@@ -168,6 +185,7 @@ export default class SlidesPlugin extends Plugin {
     this.app.workspace.detachLeavesOfType(PREVIEW_VIEW_TYPE);
     this.app.workspace.detachLeavesOfType(PRESENTATION_VIEW_TYPE);
     this.app.workspace.detachLeavesOfType(PRESENTER_VIEW_TYPE);
+    this.app.workspace.detachLeavesOfType(NAVIGATOR_VIEW_TYPE);
   }
 
   async loadSettings(): Promise<void> {
@@ -200,9 +218,8 @@ export default class SlidesPlugin extends Plugin {
     });
 
     const presView = leaf.view as PresentationView;
-    await presView.setDeck(deck, sourcePath, startIndex);
 
-    // Optionally open presenter view
+    // Optionally open presenter view and wire up sync
     if (withPresenter) {
       const presenterLeaf = this.app.workspace.getLeaf("split");
       await presenterLeaf.setViewState({
@@ -212,7 +229,14 @@ export default class SlidesPlugin extends Plugin {
 
       const presenterView = presenterLeaf.view as PresenterView;
       await presenterView.setDeck(deck, sourcePath, startIndex);
+
+      // Wire presenter sync: when presentation navigates, update presenter
+      presView.onSlideChange = (index: number) => {
+        presenterView.syncToSlide(index);
+      };
     }
+
+    await presView.setDeck(deck, sourcePath, startIndex);
   }
 
   private async openPreviewPanel(): Promise<void> {
@@ -308,6 +332,22 @@ export default class SlidesPlugin extends Plugin {
         to: { line, ch: 0 },
       });
     }
+  }
+
+  private async openNavigator(): Promise<void> {
+    const existing = this.app.workspace.getLeavesOfType(NAVIGATOR_VIEW_TYPE);
+    if (existing.length > 0) {
+      this.app.workspace.revealLeaf(existing[0]);
+      return;
+    }
+
+    const leaf = this.app.workspace.getRightLeaf(false);
+    if (!leaf) return;
+    await leaf.setViewState({
+      type: NAVIGATOR_VIEW_TYPE,
+      active: true,
+    });
+    this.app.workspace.revealLeaf(leaf);
   }
 
   private isSlidesFile(content: string): boolean {

@@ -511,6 +511,94 @@
 }
 
 /* ============================================================
+   Slide Navigator
+   ============================================================ */
+
+.sp-navigator-root {
+  padding: 8px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.sp-navigator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--sp-slide-border);
+  margin-bottom: 8px;
+}
+
+.sp-navigator-header h3 {
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.sp-navigator-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.sp-navigator-thumb {
+  position: relative;
+  border: 2px solid var(--sp-slide-border);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sp-navigator-thumb:hover {
+  border-color: var(--sp-slide-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.sp-navigator-thumb-number {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: var(--sp-slide-accent);
+  color: var(--text-on-accent);
+  font-size: 0.65em;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.sp-navigator-thumb-preview {
+  pointer-events: none;
+}
+
+.sp-navigator-thumb-preview .sp-slide {
+  font-size: 6px;
+  padding: 8px;
+  aspect-ratio: 16/9;
+}
+
+.sp-navigator-thumb-layout {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 0.55em;
+  color: var(--sp-slide-muted);
+  background: var(--background-secondary);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.sp-navigator-thumb-notes-indicator {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sp-slide-accent);
+}
+
+/* ============================================================
    Editor — Slide Separator Decoration
    ============================================================ */
 
