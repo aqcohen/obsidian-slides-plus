@@ -655,6 +655,32 @@
   max-height: 100%;
 }
 
+.sp-excalidraw-placeholder-msg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2em;
+  background: var(--background-secondary);
+  border: 2px dashed var(--sp-slide-border);
+  border-radius: 8px;
+  color: var(--sp-slide-muted);
+  font-size: 0.85em;
+  text-align: center;
+  margin: 1em 0;
+}
+
+.sp-excalidraw-icon {
+  font-size: 2em;
+  margin-bottom: 0.3em;
+}
+
+.sp-excalidraw-reason {
+  font-size: 0.8em;
+  opacity: 0.7;
+  margin-top: 0.3em;
+}
+
 /* Mermaid diagrams */
 .sp-mermaid-diagram {
   display: flex;

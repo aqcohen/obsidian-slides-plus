@@ -4,11 +4,15 @@ import { Slide, SlideFrontmatter, DeckConfig } from "../types";
 import { getLayoutClass, renderSlots } from "./layoutEngine";
 import { ensureMathRendered } from "../integrations/latexRenderer";
 import { ensureMermaidRendered } from "../integrations/mermaidRenderer";
-import { renderExcalidrawFallback } from "../integrations/excalidrawEmbed";
+import {
+  preprocessExcalidrawEmbeds,
+  resolveExcalidrawEmbeds,
+} from "../integrations/excalidrawEmbed";
 
 /**
  * Renders a Slide into a DOM element using Obsidian's MarkdownRenderer.
- * Handles layout application, background styles, and content slots.
+ * Handles layout application, background styles, content slots,
+ * and integration post-processing (LaTeX, Mermaid, Excalidraw).
  */
 export class SlideRenderEngine {
   constructor(
@@ -49,24 +53,27 @@ export class SlideRenderEngine {
     const layout = slide.frontmatter.layout || "default";
     const slots = renderSlots(slide.content, layout);
 
+    // Collect all Excalidraw embeds across all slots
+    const allExcalidrawEmbeds: ReturnType<
+      typeof preprocessExcalidrawEmbeds
+    >["embeds"] = [];
+
     if (slots.length === 1) {
-      // Single slot: render directly
-      await this.renderMarkdownContent(
-        slots[0].content,
-        slideEl,
-        component
+      const { markdown, embeds } = preprocessExcalidrawEmbeds(
+        slots[0].content
       );
+      allExcalidrawEmbeds.push(...embeds);
+      await this.renderMarkdownContent(markdown, slideEl, component);
     } else {
-      // Multiple slots: create slot containers
       for (const slot of slots) {
         const slotEl = slideEl.createDiv({
           cls: `sp-slot sp-slot-${slot.name}`,
         });
-        await this.renderMarkdownContent(
-          slot.content,
-          slotEl,
-          component
+        const { markdown, embeds } = preprocessExcalidrawEmbeds(
+          slot.content
         );
+        allExcalidrawEmbeds.push(...embeds);
+        await this.renderMarkdownContent(markdown, slotEl, component);
       }
     }
 
@@ -82,8 +89,8 @@ export class SlideRenderEngine {
       img.addClass("sp-layout-image");
     }
 
-    // Post-render integration hooks (fallbacks for custom views)
-    await this.runPostRenderHooks(slideEl);
+    // Post-render: resolve integrations
+    await this.runPostRenderHooks(slideEl, allExcalidrawEmbeds);
 
     return component;
   }
@@ -119,14 +126,24 @@ export class SlideRenderEngine {
     );
   }
 
-  private async runPostRenderHooks(container: HTMLElement): Promise<void> {
+  private async runPostRenderHooks(
+    container: HTMLElement,
+    excalidrawEmbeds: ReturnType<typeof preprocessExcalidrawEmbeds>["embeds"]
+  ): Promise<void> {
     // Give MarkdownRenderer.render() a tick to finish post-processing
     await new Promise((resolve) => setTimeout(resolve, 50));
 
-    // Fallback: ensure math, mermaid, and excalidraw render in custom views
-    await ensureMathRendered(container);
-    await ensureMermaidRendered(container);
-    await renderExcalidrawFallback(this.app, container);
+    // Resolve integrations in parallel
+    await Promise.all([
+      ensureMathRendered(container),
+      ensureMermaidRendered(container),
+      resolveExcalidrawEmbeds(
+        this.app,
+        container,
+        excalidrawEmbeds,
+        this.sourcePath
+      ),
+    ]);
   }
 
   private applyBackground(
