@@ -1,0 +1,651 @@
+/* ============================================================
+   Slides Plus — Core Styles
+   ============================================================ */
+
+/* ---- Variables ---- */
+:root {
+  --sp-slide-bg: var(--background-primary);
+  --sp-slide-text: var(--text-normal);
+  --sp-slide-heading: var(--text-normal);
+  --sp-slide-accent: var(--interactive-accent);
+  --sp-slide-muted: var(--text-muted);
+  --sp-slide-border: var(--background-modifier-border);
+  --sp-slide-font-size: 24px;
+  --sp-slide-padding: 48px;
+  --sp-transition-duration: 0.4s;
+}
+
+/* ============================================================
+   Slide Base
+   ============================================================ */
+
+.sp-slide {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--sp-slide-padding);
+  background: var(--sp-slide-bg);
+  color: var(--sp-slide-text);
+  font-size: var(--sp-slide-font-size);
+  line-height: 1.5;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-slide h1 {
+  font-size: 2em;
+  margin-bottom: 0.4em;
+  color: var(--sp-slide-heading);
+}
+.sp-slide h2 {
+  font-size: 1.5em;
+  margin-bottom: 0.4em;
+  color: var(--sp-slide-heading);
+}
+.sp-slide h3 {
+  font-size: 1.2em;
+  margin-bottom: 0.3em;
+  color: var(--sp-slide-heading);
+}
+
+.sp-slide img {
+  max-width: 100%;
+  max-height: 60%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.sp-slide pre {
+  font-size: 0.7em;
+  border-radius: 8px;
+  padding: 1em;
+  overflow-x: auto;
+}
+
+.sp-slide code {
+  font-size: 0.85em;
+}
+
+.sp-slide blockquote {
+  border-left: 4px solid var(--sp-slide-accent);
+  padding-left: 1em;
+  margin-left: 0;
+  font-style: italic;
+  color: var(--sp-slide-muted);
+}
+
+.sp-slide ul,
+.sp-slide ol {
+  padding-left: 1.5em;
+}
+
+.sp-slide li {
+  margin-bottom: 0.3em;
+}
+
+/* ============================================================
+   Layouts
+   ============================================================ */
+
+/* Default: top-aligned, vertical flow */
+.sp-layout-default {
+  justify-content: flex-start;
+}
+
+/* Cover: centered title slide */
+.sp-layout-cover {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.sp-layout-cover h1 {
+  font-size: 2.5em;
+}
+
+/* Center: everything centered */
+.sp-layout-center {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Two columns */
+.sp-layout-two-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--sp-slide-padding) / 2);
+  align-items: start;
+}
+
+.sp-layout-two-cols .sp-slot-default {
+  grid-column: 1;
+}
+.sp-layout-two-cols .sp-slot-right {
+  grid-column: 2;
+}
+
+/* Image right */
+.sp-layout-image-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--sp-slide-padding) / 2);
+  align-items: center;
+}
+
+.sp-layout-image-right .sp-slot-default {
+  grid-column: 1;
+}
+.sp-layout-image-right .sp-slot-image {
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Image left */
+.sp-layout-image-left {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--sp-slide-padding) / 2);
+  align-items: center;
+}
+
+.sp-layout-image-left .sp-slot-image {
+  grid-column: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sp-layout-image-left .sp-slot-default {
+  grid-column: 2;
+}
+
+/* Section divider */
+.sp-layout-section {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.sp-layout-section h1,
+.sp-layout-section h2 {
+  font-size: 3em;
+  font-weight: 700;
+}
+
+/* Quote */
+.sp-layout-quote {
+  justify-content: center;
+  align-items: center;
+  padding: calc(var(--sp-slide-padding) * 2);
+}
+
+.sp-layout-quote blockquote {
+  font-size: 1.3em;
+  border-left-width: 6px;
+}
+
+/* Full bleed */
+.sp-layout-full {
+  padding: 0;
+}
+
+.sp-layout-image .sp-layout-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================================================
+   Preview Panel
+   ============================================================ */
+
+.sp-preview-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 8px;
+}
+
+.sp-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0 8px;
+  border-bottom: 1px solid var(--sp-slide-border);
+  margin-bottom: 8px;
+}
+
+.sp-slide-counter {
+  font-size: 0.85em;
+  color: var(--sp-slide-muted);
+  font-weight: 500;
+}
+
+.sp-preview-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.sp-btn {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--sp-slide-border);
+  background: var(--background-secondary);
+  color: var(--sp-slide-text);
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+.sp-btn:hover {
+  background: var(--background-modifier-hover);
+}
+
+.sp-btn-primary {
+  background: var(--sp-slide-accent);
+  color: var(--text-on-accent);
+  border-color: var(--sp-slide-accent);
+}
+
+.sp-btn-primary:hover {
+  opacity: 0.9;
+}
+
+.sp-btn-small {
+  padding: 2px 6px;
+  font-size: 0.75em;
+}
+
+.sp-preview-slide-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: auto;
+  border-radius: 6px;
+  border: 1px solid var(--sp-slide-border);
+  background: var(--background-primary-alt);
+}
+
+.sp-preview-slide-area .sp-slide {
+  width: 100%;
+  aspect-ratio: 16/9;
+  font-size: 12px;
+  padding: 16px;
+}
+
+.sp-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: var(--sp-slide-muted);
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+/* ============================================================
+   Presentation View
+   ============================================================ */
+
+.sp-presentation-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  cursor: none;
+}
+
+.sp-presentation-root:hover {
+  cursor: default;
+}
+
+.sp-presentation-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sp-presentation-stage .sp-slide-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sp-presentation-stage .sp-slide {
+  width: 100%;
+  height: 100%;
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+/* Progress bar */
+.sp-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+
+.sp-progress-fill {
+  height: 100%;
+  background: var(--sp-slide-accent);
+  transition: width 0.3s ease;
+}
+
+/* ============================================================
+   Transitions
+   ============================================================ */
+
+/* Slide left/right */
+.sp-transition-slide {
+  transition: transform var(--sp-transition-duration) ease;
+  position: absolute;
+  inset: 0;
+}
+
+.sp-transition-slide.sp-dir-forward.sp-entering {
+  transform: translateX(100%);
+}
+.sp-transition-slide.sp-dir-backward.sp-entering {
+  transform: translateX(-100%);
+}
+.sp-transition-slide.sp-active {
+  transform: translateX(0);
+}
+.sp-transition-slide.sp-dir-forward.sp-leaving {
+  transform: translateX(-100%);
+}
+.sp-transition-slide.sp-dir-backward.sp-leaving {
+  transform: translateX(100%);
+}
+
+/* Fade */
+.sp-transition-fade {
+  transition: opacity var(--sp-transition-duration) ease;
+  position: absolute;
+  inset: 0;
+}
+
+.sp-transition-fade.sp-entering {
+  opacity: 0;
+}
+.sp-transition-fade.sp-active {
+  opacity: 1;
+}
+.sp-transition-fade.sp-leaving {
+  opacity: 0;
+}
+
+/* Slide up */
+.sp-transition-slide-up {
+  transition: transform var(--sp-transition-duration) ease;
+  position: absolute;
+  inset: 0;
+}
+
+.sp-transition-slide-up.sp-dir-forward.sp-entering {
+  transform: translateY(100%);
+}
+.sp-transition-slide-up.sp-dir-backward.sp-entering {
+  transform: translateY(-100%);
+}
+.sp-transition-slide-up.sp-active {
+  transform: translateY(0);
+}
+.sp-transition-slide-up.sp-dir-forward.sp-leaving {
+  transform: translateY(-100%);
+}
+.sp-transition-slide-up.sp-dir-backward.sp-leaving {
+  transform: translateY(100%);
+}
+
+/* ============================================================
+   Presenter View
+   ============================================================ */
+
+.sp-presenter-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px;
+  gap: 12px;
+  background: var(--background-primary);
+}
+
+.sp-presenter-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+.sp-presenter-current {
+  border: 2px solid var(--sp-slide-accent);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sp-presenter-current .sp-slide {
+  font-size: 14px;
+  padding: 16px;
+}
+
+.sp-presenter-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sp-presenter-next {
+  flex: 1;
+  border: 1px solid var(--sp-slide-border);
+  border-radius: 6px;
+  overflow: hidden;
+  opacity: 0.7;
+}
+
+.sp-presenter-next .sp-slide {
+  font-size: 10px;
+  padding: 12px;
+}
+
+.sp-presenter-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+  font-size: 0.9em;
+}
+
+.sp-presenter-timer {
+  font-family: var(--font-monospace);
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--sp-slide-accent);
+}
+
+.sp-presenter-counter {
+  color: var(--sp-slide-muted);
+}
+
+.sp-presenter-timer-controls {
+  margin-left: auto;
+}
+
+.sp-presenter-notes {
+  max-height: 30%;
+  overflow-y: auto;
+  padding: 12px;
+  background: var(--background-secondary);
+  border-radius: 6px;
+  border: 1px solid var(--sp-slide-border);
+}
+
+.sp-presenter-notes-label {
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sp-slide-muted);
+  margin-bottom: 6px;
+}
+
+.sp-presenter-notes-content {
+  font-size: 0.95em;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* ============================================================
+   Editor — Slide Separator Decoration
+   ============================================================ */
+
+.sp-editor-separator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  margin: 4px 0;
+  user-select: none;
+}
+
+.sp-editor-separator-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    var(--sp-slide-accent),
+    transparent
+  );
+  border-radius: 1px;
+}
+
+.sp-editor-separator-label {
+  font-size: 0.75em;
+  color: var(--sp-slide-accent);
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 2px 8px;
+  background: var(--background-secondary);
+  border-radius: 3px;
+}
+
+/* ============================================================
+   Excalidraw Embeds
+   ============================================================ */
+
+.sp-excalidraw-embed {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.sp-excalidraw-embed svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Mermaid diagrams */
+.sp-mermaid-diagram {
+  display: flex;
+  justify-content: center;
+  padding: 1em 0;
+}
+
+.sp-mermaid-diagram svg {
+  max-width: 100%;
+}
+
+/* ============================================================
+   Themes
+   ============================================================ */
+
+/* Default theme — inherits Obsidian's native colors */
+.sp-theme-default {
+  /* Uses CSS variables from :root */
+}
+
+/* Dark theme */
+.sp-theme-dark {
+  --sp-slide-bg: #1a1a2e;
+  --sp-slide-text: #e0e0e0;
+  --sp-slide-heading: #ffffff;
+  --sp-slide-accent: #e94560;
+  --sp-slide-muted: #888;
+}
+
+/* Minimal theme */
+.sp-theme-minimal {
+  --sp-slide-bg: #fafafa;
+  --sp-slide-text: #333;
+  --sp-slide-heading: #111;
+  --sp-slide-accent: #333;
+  --sp-slide-muted: #999;
+  --sp-slide-font-size: 22px;
+  --sp-slide-padding: 64px;
+}
+
+.theme-dark .sp-theme-minimal {
+  --sp-slide-bg: #1e1e1e;
+  --sp-slide-text: #d4d4d4;
+  --sp-slide-heading: #fff;
+  --sp-slide-accent: #d4d4d4;
+  --sp-slide-muted: #666;
+}
+
+/* ============================================================
+   PDF Export
+   ============================================================ */
+
+.sp-print-container {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 100vw;
+  z-index: -1;
+}
+
+.sp-print-slide {
+  width: 100%;
+  page-break-after: always;
+  page-break-inside: avoid;
+}
+
+/* When printing, show only slides */
+@media print {
+  body.sp-printing > *:not(.sp-print-container) {
+    display: none !important;
+  }
+
+  body.sp-printing .sp-print-container {
+    position: static;
+    left: auto;
+    z-index: auto;
+  }
+
+  body.sp-printing .sp-print-slide {
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @page {
+    size: landscape;
+    margin: 0;
+  }
+}
