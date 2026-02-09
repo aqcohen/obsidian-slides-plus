@@ -6,6 +6,7 @@ import {
 } from "obsidian";
 import type { App } from "obsidian";
 import { PREVIEW_VIEW_TYPE, SlidesDeck } from "../types";
+import { isSlidesFile } from "../utils";
 import { parseDeck, getSlideIndexAtLine } from "../parser/slideParser";
 import { SlideRenderEngine } from "../engine/renderEngine";
 import { ThemeEngine } from "../engine/themeEngine";
@@ -103,7 +104,7 @@ export class PreviewPanel extends ItemView {
     if (!view) return;
 
     const content = view.editor.getValue();
-    if (!this.isSlidesFile(content)) {
+    if (!isSlidesFile(content)) {
       this.showPlaceholder("Open a slides file to preview");
       return;
     }
@@ -120,7 +121,7 @@ export class PreviewPanel extends ItemView {
     if (!view) return;
 
     const content = view.editor.getValue();
-    if (!this.isSlidesFile(content)) return;
+    if (!isSlidesFile(content)) return;
 
     this.parseDeckAndRender(content);
   }
@@ -219,10 +220,4 @@ export class PreviewPanel extends ItemView {
     return leaf;
   }
 
-  private isSlidesFile(content: string): boolean {
-    // Check for slides: true in frontmatter
-    const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
-    if (!match) return false;
-    return /^\s*slides\s*:\s*true\s*$/m.test(match[1]);
-  }
 }

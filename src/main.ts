@@ -16,6 +16,7 @@ import {
   DEFAULT_SETTINGS,
   SlidesSettingTab,
 } from "./settings";
+import { isSlidesFile } from "./utils";
 
 export default class SlidesPlugin extends Plugin {
   settings: SlidesPluginSettings = DEFAULT_SETTINGS;
@@ -52,7 +53,7 @@ export default class SlidesPlugin extends Plugin {
         const view = this.app.workspace.getActiveViewOfType(MarkdownView);
         if (!view) return false;
         const content = view.editor.getValue();
-        if (!this.isSlidesFile(content)) return false;
+        if (!isSlidesFile(content)) return false;
         if (checking) return true;
         this.startPresentation(view);
         return true;
@@ -66,7 +67,7 @@ export default class SlidesPlugin extends Plugin {
         const view = this.app.workspace.getActiveViewOfType(MarkdownView);
         if (!view) return false;
         const content = view.editor.getValue();
-        if (!this.isSlidesFile(content)) return false;
+        if (!isSlidesFile(content)) return false;
         if (checking) return true;
         this.startPresentation(view, true);
         return true;
@@ -92,7 +93,7 @@ export default class SlidesPlugin extends Plugin {
         const view = this.app.workspace.getActiveViewOfType(MarkdownView);
         if (!view) return false;
         const content = view.editor.getValue();
-        if (!this.isSlidesFile(content)) return false;
+        if (!isSlidesFile(content)) return false;
         if (checking) return true;
         this.exportPdf(view);
         return true;
@@ -106,7 +107,7 @@ export default class SlidesPlugin extends Plugin {
         const view = this.app.workspace.getActiveViewOfType(MarkdownView);
         if (!view) return false;
         const content = view.editor.getValue();
-        if (!this.isSlidesFile(content)) return false;
+        if (!isSlidesFile(content)) return false;
         if (checking) return true;
         this.navigateSlide(view, 1);
         return true;
@@ -120,7 +121,7 @@ export default class SlidesPlugin extends Plugin {
         const view = this.app.workspace.getActiveViewOfType(MarkdownView);
         if (!view) return false;
         const content = view.editor.getValue();
-        if (!this.isSlidesFile(content)) return false;
+        if (!isSlidesFile(content)) return false;
         if (checking) return true;
         this.navigateSlide(view, -1);
         return true;
@@ -151,7 +152,7 @@ export default class SlidesPlugin extends Plugin {
     // Ribbon icon
     this.addRibbonIcon("presentation", "Slides Plus", () => {
       const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-      if (view && this.isSlidesFile(view.editor.getValue())) {
+      if (view && isSlidesFile(view.editor.getValue())) {
         this.startPresentation(view);
       } else {
         new Notice("Open a slides file first (needs slides: true in frontmatter)");
@@ -171,7 +172,7 @@ export default class SlidesPlugin extends Plugin {
             const view = this.app.workspace.getActiveViewOfType(MarkdownView);
             if (!view) return;
             const content = view.editor.getValue();
-            if (this.isSlidesFile(content)) {
+            if (isSlidesFile(content)) {
               this.openPreviewPanel();
             }
           }, 200);
@@ -350,9 +351,4 @@ export default class SlidesPlugin extends Plugin {
     this.app.workspace.revealLeaf(leaf);
   }
 
-  private isSlidesFile(content: string): boolean {
-    const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
-    if (!match) return false;
-    return /^\s*slides\s*:\s*true\s*$/m.test(match[1]);
-  }
 }

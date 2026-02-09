@@ -1,5 +1,6 @@
 import { ItemView, WorkspaceLeaf, MarkdownView, Component } from "obsidian";
 import { SlidesDeck } from "../types";
+import { isSlidesFile } from "../utils";
 import { parseDeck } from "../parser/slideParser";
 import { SlideRenderEngine } from "../engine/renderEngine";
 
@@ -78,7 +79,7 @@ export class SlideNavigator extends ItemView {
     }
 
     const content = view.editor.getValue();
-    if (!this.isSlidesFile(content)) {
+    if (!isSlidesFile(content)) {
       this.showPlaceholder("Active file is not a slides file");
       return;
     }
@@ -203,9 +204,4 @@ export class SlideNavigator extends ItemView {
     this.slideComponents = [];
   }
 
-  private isSlidesFile(content: string): boolean {
-    const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
-    if (!match) return false;
-    return /^\s*slides\s*:\s*true\s*$/m.test(match[1]);
-  }
 }

@@ -32,7 +32,8 @@ export const slideSeparatorPlugin = ViewPlugin.fromClass(
       const text = doc.toString();
 
       // Only activate for slides files
-      if (!text.match(/^---\s*\n[\s\S]*?slides\s*:\s*true[\s\S]*?\n---/)) {
+      const normalized = text.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").trimStart();
+      if (!normalized.match(/^---\s*\n[\s\S]*?slides\s*:\s*["']?true["']?[\s\S]*?\n---/)) {
         return builder.finish();
       }
 
