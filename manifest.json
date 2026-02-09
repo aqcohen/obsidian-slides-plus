@@ -1,0 +1,9 @@
+{
+  "id": "obsidian-slides-plus",
+  "name": "Slides Plus",
+  "version": "0.1.0",
+  "minAppVersion": "1.4.0",
+  "description": "Slidev-inspired presentation plugin with Excalidraw, Mermaid, and LaTeX support",
+  "author": "g33k",
+  "isDesktopOnly": true
+}
