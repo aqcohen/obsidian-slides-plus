@@ -21,9 +21,11 @@ export async function ensureMathRendered(
 
   for (const el of Array.from(mathEls)) {
     const mathText = el.getAttribute("data-math") || el.textContent || "";
-    const isInline = el.classList.contains("math-inline");
-    el.empty();
-    renderMath(el as HTMLElement, mathText, !isInline);
+    const isDisplay = el.classList.contains("math-display");
+    (el as HTMLElement).empty();
+    // renderMath(source, display) returns an HTMLElement
+    const rendered = renderMath(mathText, isDisplay);
+    el.appendChild(rendered);
     el.classList.add("is-loaded");
   }
 

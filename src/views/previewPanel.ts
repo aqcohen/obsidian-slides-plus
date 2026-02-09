@@ -181,10 +181,9 @@ export class PreviewPanel extends ItemView {
 
   private startPresentation(): void {
     if (!this.currentDeck) return;
-    // Trigger the presentation command
-    this.app.commands.executeCommandById(
-      "obsidian-slides-plus:start-presentation"
-    );
+    // Trigger the presentation command via Obsidian's internal commands API
+    (this.app as unknown as { commands: { executeCommandById: (id: string) => void } })
+      .commands.executeCommandById("obsidian-slides-plus:start-presentation");
   }
 
   private updateCounter(): void {

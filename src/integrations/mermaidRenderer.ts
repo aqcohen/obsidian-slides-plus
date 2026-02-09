@@ -18,10 +18,12 @@ export async function ensureMermaidRendered(
   if (codeBlocks.length === 0) return;
 
   // Dynamically import mermaid (it's bundled with Obsidian)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mermaid: { render: (id: string, text: string) => Promise<{ svg: string }> };
   try {
-    mermaid = await import("mermaid");
-    mermaid = (mermaid as unknown as { default: typeof mermaid }).default || mermaid;
+    // @ts-ignore — mermaid is bundled with Obsidian at runtime
+    const mod = await import("mermaid");
+    mermaid = mod.default || mod;
   } catch {
     // Mermaid not available — Obsidian's built-in renderer will handle it
     return;
