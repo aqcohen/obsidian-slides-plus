@@ -11,34 +11,40 @@ import {
  *
  * Format:
  * - Global frontmatter (YAML between first --- pair) sets deck config
- * - Slides are separated by --- on its own line (with blank lines around it)
- * - Per-slide frontmatter: --- block at the start of a slide
- * - Speaker notes: <!-- notes --> HTML comments
+ * - Slides are separated by --- on its own line
+ * - Per-slide frontmatter: YAML lines immediately after a --- separator,
+ *   closed by another --- (Slidev-style)
+ * - Speaker notes: <!-- ... --> HTML comments
  */
 export function parseDeck(markdown: string): SlidesDeck {
-  const { globalFrontmatter, body } = extractGlobalFrontmatter(markdown);
+  const normalized = markdown.replace(/\r\n/g, "\n");
+  const { globalFrontmatter, body } = extractGlobalFrontmatter(normalized);
   const globalConfig = parseGlobalConfig(globalFrontmatter);
-  const rawSlides = splitSlides(body);
+  const rawSlides = parseSlides(body);
 
   const slides: Slide[] = rawSlides.map((raw, index) => {
-    const { frontmatter, content } = extractSlideFrontmatter(raw);
-    const { cleanContent, notes } = extractNotes(content);
+    const { cleanContent, notes } = extractNotes(raw.content);
 
     return {
       index,
       content: cleanContent.trim(),
       notes,
-      frontmatter,
-      raw,
+      frontmatter: raw.frontmatter,
+      raw: raw.raw,
     };
   });
 
   return { globalConfig, slides };
 }
 
+interface RawSlide {
+  frontmatter: SlideFrontmatter;
+  content: string;
+  raw: string;
+}
+
 /**
  * Extract the global YAML frontmatter from the top of the document.
- * Returns the frontmatter object and the remaining body.
  */
 function extractGlobalFrontmatter(
   markdown: string
@@ -61,50 +67,142 @@ function extractGlobalFrontmatter(
 }
 
 /**
- * Split the markdown body into individual slide strings.
- * Slides are separated by --- on its own line with blank lines around it.
- * We use a pattern that matches --- surrounded by newlines to distinguish
- * from frontmatter --- or thematic breaks within content.
+ * Parse the body into slides by scanning line-by-line.
+ *
+ * A --- on its own line is a slide separator.
+ * If YAML-like lines follow a separator and are closed by another ---,
+ * those lines are per-slide frontmatter for the next slide.
+ *
+ * Example:
+ *   # Slide 1 content
+ *   ---                         ← separator
+ *   layout: cover               ← per-slide frontmatter
+ *   background: linear-gradient(...)
+ *   ---                         ← closes frontmatter
+ *   # Slide 2 content           ← slide 2 body
  */
-function splitSlides(body: string): string[] {
-  // Split on --- that is on its own line, preceded and followed by blank lines
-  // This avoids matching frontmatter delimiters or inline horizontal rules
-  const separator = /\n---\n/;
-  const parts = body.split(separator);
+function parseSlides(body: string): RawSlide[] {
+  const lines = body.split("\n");
+  const slides: RawSlide[] = [];
 
-  // Filter out empty slides but keep at least one
-  const slides = parts.map((s) => s.trim()).filter((s) => s.length > 0);
+  let currentContent: string[] = [];
+  let currentFrontmatter: SlideFrontmatter = {};
+  let currentRaw: string[] = [];
 
-  return slides.length > 0 ? slides : [""];
+  let i = 0;
+
+  // Skip leading blank lines
+  while (i < lines.length && lines[i].trim() === "") i++;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    if (line.trim() === "---") {
+      // This is a slide separator. Save current slide.
+      const contentStr = currentContent.join("\n");
+      if (contentStr.trim() || slides.length === 0) {
+        slides.push({
+          frontmatter: currentFrontmatter,
+          content: contentStr,
+          raw: currentRaw.join("\n"),
+        });
+      }
+
+      // Reset for next slide
+      currentContent = [];
+      currentFrontmatter = {};
+      currentRaw = [line];
+      i++;
+
+      // Look ahead: is there per-slide frontmatter?
+      const fmResult = tryParseFrontmatter(lines, i);
+      if (fmResult) {
+        currentFrontmatter = fmResult.frontmatter;
+        currentRaw.push(...lines.slice(i, fmResult.endIndex + 1));
+        i = fmResult.endIndex + 1;
+      }
+    } else {
+      currentContent.push(line);
+      currentRaw.push(line);
+      i++;
+    }
+  }
+
+  // Don't forget the last slide
+  const lastContent = currentContent.join("\n");
+  if (lastContent.trim() || slides.length === 0) {
+    slides.push({
+      frontmatter: currentFrontmatter,
+      content: lastContent,
+      raw: currentRaw.join("\n"),
+    });
+  }
+
+  return slides;
 }
 
 /**
- * Extract per-slide frontmatter from the beginning of a slide's content.
- * Per-slide frontmatter starts with --- and ends with ---.
+ * Try to parse per-slide frontmatter starting at line index `start`.
+ * Returns the parsed frontmatter and the index of the closing ---,
+ * or null if it's not valid frontmatter.
+ *
+ * Valid frontmatter: consecutive lines that look like "key: value",
+ * terminated by a line that is exactly "---".
  */
-function extractSlideFrontmatter(
-  slideContent: string
-): { frontmatter: SlideFrontmatter; content: string } {
-  const trimmed = slideContent.trimStart();
-  if (!trimmed.startsWith("---")) {
-    return { frontmatter: {}, content: slideContent };
+function tryParseFrontmatter(
+  lines: string[],
+  start: number
+): { frontmatter: SlideFrontmatter; endIndex: number } | null {
+  // Collect lines until we hit --- or a non-YAML line
+  const yamlLines: string[] = [];
+
+  for (let i = start; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+
+    // Closing ---
+    if (trimmed === "---") {
+      if (yamlLines.length === 0) return null; // empty frontmatter = just another separator
+      const frontmatter = parseYamlSimple(
+        yamlLines.join("\n")
+      ) as SlideFrontmatter;
+      return { frontmatter, endIndex: i };
+    }
+
+    // Blank lines are OK inside frontmatter
+    if (trimmed === "") {
+      yamlLines.push(lines[i]);
+      continue;
+    }
+
+    // Check if this looks like a YAML key:value line
+    if (looksLikeYaml(trimmed)) {
+      yamlLines.push(lines[i]);
+    } else {
+      // Not YAML — this isn't frontmatter
+      return null;
+    }
   }
 
-  const endIndex = trimmed.indexOf("\n---", 3);
-  if (endIndex === -1) {
-    return { frontmatter: {}, content: slideContent };
-  }
+  // Reached end of file without closing --- → not frontmatter
+  return null;
+}
 
-  const yamlBlock = trimmed.slice(3, endIndex).trim();
-  const content = trimmed.slice(endIndex + 4);
-  const frontmatter = parseYamlSimple(yamlBlock) as SlideFrontmatter;
-
-  return { frontmatter, content };
+/**
+ * Heuristic: does this line look like a YAML key: value pair?
+ */
+function looksLikeYaml(line: string): boolean {
+  // Comments
+  if (line.startsWith("#")) return true;
+  // Must have a colon with a key before it
+  const colonIndex = line.indexOf(":");
+  if (colonIndex <= 0) return false;
+  // Key should be a simple identifier (letters, numbers, hyphens, underscores)
+  const key = line.slice(0, colonIndex).trim();
+  return /^[\w-]+$/.test(key);
 }
 
 /**
  * Extract speaker notes from HTML comments.
- * Notes are in <!-- ... --> blocks.
  */
 function extractNotes(
   content: string
@@ -152,7 +250,6 @@ function parseGlobalConfig(
 /**
  * Simple YAML parser for flat key-value pairs.
  * Handles: strings, numbers, booleans. No nested objects or arrays.
- * This avoids pulling in a full YAML library.
  */
 function parseYamlSimple(yaml: string): Record<string, unknown> {
   const result: Record<string, unknown> = {};
@@ -178,7 +275,11 @@ function parseYamlSimple(yaml: string): Record<string, unknown> {
       value = true;
     } else if (value === "false") {
       value = false;
-    } else if (typeof value === "string" && !isNaN(Number(value)) && value !== "") {
+    } else if (
+      typeof value === "string" &&
+      !isNaN(Number(value)) &&
+      value !== ""
+    ) {
       value = Number(value);
     }
 
@@ -196,36 +297,47 @@ export function getSlideIndexAtLine(
   markdown: string,
   line: number
 ): number {
-  const lines = markdown.split("\n");
+  const normalized = markdown.replace(/\r\n/g, "\n");
+  const lines = normalized.split("\n");
   let slideIndex = 0;
-
-  // Account for global frontmatter
-  let inFrontmatter = false;
-  let pastFrontmatter = false;
+  let inGlobalFrontmatter = false;
+  let pastGlobalFrontmatter = false;
+  let inSlideFrontmatter = false;
 
   for (let i = 0; i < Math.min(line, lines.length); i++) {
     const trimmed = lines[i].trim();
 
+    // Track global frontmatter
     if (i === 0 && trimmed === "---") {
-      inFrontmatter = true;
+      inGlobalFrontmatter = true;
+      continue;
+    }
+    if (inGlobalFrontmatter && trimmed === "---") {
+      inGlobalFrontmatter = false;
+      pastGlobalFrontmatter = true;
+      continue;
+    }
+    if (inGlobalFrontmatter) continue;
+
+    if (!pastGlobalFrontmatter && i > 0) {
+      pastGlobalFrontmatter = true;
+    }
+
+    // Track per-slide frontmatter (skip the closing ---)
+    if (inSlideFrontmatter) {
+      if (trimmed === "---") {
+        inSlideFrontmatter = false;
+      }
       continue;
     }
 
-    if (inFrontmatter && trimmed === "---") {
-      inFrontmatter = false;
-      pastFrontmatter = true;
-      continue;
-    }
-
-    if (inFrontmatter) continue;
-
-    // Slide separator: --- on its own line
-    if (pastFrontmatter && trimmed === "---") {
+    // Slide separator
+    if (pastGlobalFrontmatter && trimmed === "---") {
       slideIndex++;
-    }
-
-    if (!pastFrontmatter && i > 0) {
-      pastFrontmatter = true;
+      // Check if next lines are per-slide frontmatter
+      if (i + 1 < lines.length && looksLikeYaml(lines[i + 1].trim())) {
+        inSlideFrontmatter = true;
+      }
     }
   }
 
