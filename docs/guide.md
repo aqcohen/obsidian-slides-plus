@@ -62,7 +62,7 @@ Set these at the top of your file:
 ```yaml
 ---
 slides: true          # Required — marks this file as a slide deck
-theme: default        # default | dark | minimal
+theme: obsidian       # obsidian | midnight | paper | boardroom | academic | studio
 transition: slide     # slide | fade | slide-up | none
 aspectRatio: 16/9     # 16/9 | 4/3 | 16/10
 ---
@@ -176,18 +176,21 @@ No padding — content fills the entire slide. Good for full-bleed images.
 
 ## Themes
 
-Three built-in themes. Set globally in frontmatter:
+Six built-in themes. Set globally in frontmatter:
 
 | Theme | Description |
 |-------|-------------|
-| `default` | Inherits your Obsidian color scheme (light or dark) |
-| `dark` | Deep blue background with red accents |
-| `minimal` | Clean and subtle with generous whitespace |
+| `obsidian` | Adapts to Obsidian's light/dark mode |
+| `midnight` | Deep blue, fixed dark palette |
+| `paper` | Paper-and-ink, weight-based hierarchy |
+| `boardroom` | Professional, projection-optimized |
+| `academic` | Warm academic, Poppins + Lora |
+| `studio` | Bold artist's palette on black |
 
 ```yaml
 ---
 slides: true
-theme: dark
+theme: midnight
 ---
 ```
 

@@ -75,7 +75,7 @@ Set a theme globally in **Settings → Slides Plus**, or per-deck in frontmatter
 ```yaml
 ---
 slides: true
-theme: corporate
+theme: boardroom
 ---
 ```
 

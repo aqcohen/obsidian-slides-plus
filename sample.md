@@ -1,6 +1,6 @@
 ---
 slides: true
-theme: default
+theme: obsidian
 transition: slide
 aspectRatio: 16/9
 ---
@@ -24,7 +24,7 @@ El primer bloque YAML configura todo el deck:
 ```yaml
 ---
 slides: true          # Obligatorio para activar el plugin
-theme: default        # Tema visual: default | dark | minimal
+theme: obsidian       # Tema visual: obsidian | midnight | paper | boardroom | academic | studio
 transition: slide     # Transicion: slide | fade | slide-up | none
 aspectRatio: 16/9     # Relacion de aspecto: 16/9 | 4/3 | 16/10
 ---
@@ -431,15 +431,18 @@ Cambia el tema en el frontmatter global:
 ```yaml
 ---
 slides: true
-theme: dark       # o: default, minimal
+theme: midnight   # o: obsidian, paper, boardroom, academic, studio
 ---
 ```
 
 | Tema | Descripcion |
 |------|-------------|
-| `default` | Hereda los colores de tu tema de Obsidian |
-| `dark` | Fondo azul oscuro con acentos rojos |
-| `minimal` | Limpio, sutil, mucho espacio en blanco |
+| `obsidian` | Se adapta al modo claro/oscuro de Obsidian |
+| `midnight` | Azul profundo, paleta oscura fija |
+| `paper` | Papel y tinta, jerarquia por peso tipografico |
+| `boardroom` | Profesional, optimizado para proyeccion |
+| `academic` | Academico calido, Poppins + Lora |
+| `studio` | Paleta de artista audaz sobre negro |
 
 El tema se aplica a todos los slides del deck.
 

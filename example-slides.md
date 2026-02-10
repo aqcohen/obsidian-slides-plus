@@ -1,6 +1,6 @@
 ---
 slides: true
-theme: default
+theme: obsidian
 transition: slide
 aspectRatio: 16/9
 ---
@@ -94,15 +94,18 @@ Set the theme in your frontmatter:
 ```yaml
 ---
 slides: true
-theme: dark    # or: default, minimal
+theme: midnight    # or: obsidian, paper, boardroom, academic, studio
 ---
 ```
 
 | Theme | Style |
 |-------|-------|
-| `default` | Inherits Obsidian's colors |
-| `dark` | Deep blue with red accents |
-| `minimal` | Clean, subtle, lots of whitespace |
+| `obsidian` | Adapts to Obsidian's light/dark mode |
+| `midnight` | Deep blue, fixed dark palette |
+| `paper` | Paper-and-ink, weight-based hierarchy |
+| `boardroom` | Professional, projection-optimized |
+| `academic` | Warm academic, Poppins + Lora |
+| `studio` | Bold artist's palette on black |
 
 ---
 
