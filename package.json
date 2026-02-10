@@ -1,14 +1,18 @@
 {
   "name": "obsidian-slides-plus",
   "version": "0.1.0",
-  "description": "Slidev-inspired presentation plugin for Obsidian",
+  "description": "Slidev-inspired presentations inside Obsidian. Themes, layouts, transitions, presenter view, PDF export, and Excalidraw/Mermaid/LaTeX support.",
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aqcohen/obsidian-slides-plus"
+  },
   "scripts": {
     "dev": "node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production"
   },
-  "keywords": [],
-  "author": "g33k",
+  "keywords": ["obsidian", "slides", "presentation", "markdown"],
+  "author": "aqcohen",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.11.0",
