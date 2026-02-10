@@ -31,7 +31,7 @@ theme: academic
 ---
 ```
 
-2. Write your slides separated by `---`:
+1. Write your slides separated by `---`:
 
 ```markdown
 ---
@@ -56,8 +56,8 @@ layout: quote
 > A great quote goes here.
 ```
 
-3. Open the **Slide Preview** panel from the command palette or the ribbon icon.
-4. Press the **Present** button to go fullscreen.
+1. Open the **Slide Preview** panel from the command palette or the ribbon icon.
+2. Press the **Present** button to go fullscreen.
 
 ## Themes
 
@@ -79,17 +79,27 @@ theme: corporate
 ---
 ```
 
-## Per-Slide Overrides
+## Per-Slide Styling
 
-Override any design token on a single slide:
+Use simple, Markdown-friendly properties instead of CSS:
 
 ```yaml
 ---
-sp-slide-bg: "#1a1a2e"
-sp-slide-accent: "#e94560"
-sp-font-heading: Georgia, serif
+background: sunset          # Preset gradient (sunset, ocean, forest, fire, etc.)
+accent-color: purple        # Named color or hex code
+text-size: large           # small | normal | large | huge
+text-align: center         # left | center | right
+heading-font: serif        # serif | sans | mono (or specific font names)
+padding: large             # none | small | normal | large
 ---
 ```
+
+**Available background presets**: `sunset`, `ocean`, `forest`, `fire`, `night`, `aurora`, `cosmic`  
+**Available color presets**: `blue`, `red`, `green`, `purple`, `orange`, `pink`, `yellow`, `teal`
+
+For advanced users, custom CSS is still available via `custom-css:` frontmatter.
+
+See [Frontmatter Reference](docs/frontmatter-reference.md) for all options.
 
 ## Speaker Notes
 

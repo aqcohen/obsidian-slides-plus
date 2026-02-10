@@ -12,6 +12,7 @@ aspectRatio: 16/9
 <!-- Welcome to Slides Plus! This is a speaker note. It will appear in the presenter view but not in the presentation. -->
 
 ---
+
 layout: center
 ---
 
@@ -26,6 +27,7 @@ layout: center
 - PDF export
 
 ---
+
 layout: two-cols
 ---
 
@@ -34,6 +36,7 @@ layout: two-cols
 This content appears on the **left** side.
 
 You can put any markdown here:
+
 - Lists
 - **Bold** and *italic*
 - `inline code`
@@ -76,6 +79,7 @@ $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
 Inline math works too: $\nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t}$
 
 ---
+
 layout: section
 ---
 
@@ -117,6 +121,7 @@ Each slide can override the global transition with its own `transition:` frontma
 <!-- You can mix transitions — for example, use fade for section dividers and slide for content. -->
 
 ---
+
 layout: quote
 ---
 
@@ -125,13 +130,48 @@ layout: quote
 > — Alan Kay
 
 ---
+
 layout: cover
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+background: sunset        # Use preset instead of CSS gradient
 ---
 
 # Custom Backgrounds
 
-Use `background:` in frontmatter for colors, gradients, or images
+Use preset names, colors, or image paths
+
+Available presets: `sunset`, `ocean`, `forest`, `fire`, `night`, `aurora`
+
+---
+
+layout: center
+text-size: large          # Simple preset instead of font-size CSS
+---
+
+## Markdown-Friendly Styling
+
+No CSS knowledge required!
+
+- Use `text-size: large` instead of `font-size: 1.2em`
+- Use `background: ocean` instead of gradients
+- Use `accent-color: purple` instead of hex codes
+
+---
+
+accent-color: orange      # Override accent color per slide
+---
+
+## Per-Slide Customization
+
+```yaml
+---
+background: night
+accent-color: teal
+text-size: large
+text-align: center
+---
+```
+
+All values are **Markdown-friendly** — no CSS required!
 
 ---
 
@@ -178,6 +218,7 @@ function parseDeck(markdown: string): SlidesDeck {
 | `F` | Toggle fullscreen |
 
 ---
+
 layout: center
 ---
 
@@ -192,6 +233,7 @@ layout: center
 - **Insert slide** — add a `---` separator
 
 ---
+
 layout: cover
 ---
 

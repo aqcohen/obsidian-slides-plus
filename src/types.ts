@@ -22,10 +22,25 @@ export interface Slide {
 export interface SlideFrontmatter {
   layout?: LayoutType;
   image?: string;
-  background?: string;
+  
+  // Markdown-native properties (user-friendly)
+  background?: string;              // Preset name, color, or image path
+  "background-color"?: string;      // Override background color
+  "accent-color"?: string;          // Accent color for highlights
+  "text-color"?: string;            // Text color
+  "text-size"?: "small" | "normal" | "large" | "huge";
+  "text-align"?: "left" | "center" | "right";
+  "heading-font"?: string;          // Font preset or font-family name
+  "body-font"?: string;             // Font preset or font-family name
+  padding?: "none" | "small" | "normal" | "large";
+  
+  // Power user escape hatch
+  "custom-css"?: string;            // Raw CSS for advanced users
+  
+  // Legacy properties (backwards compatibility)
   class?: string;
   transition?: TransitionType;
-  [key: string]: unknown;
+  [key: string]: unknown;           // Allows sp-* properties for backwards compat
 }
 
 export type LayoutType =
