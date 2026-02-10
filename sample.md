@@ -207,7 +207,7 @@ El contenido va a la izquierda y la imagen a la derecha.
 ```yaml
 ---
 layout: image-right
-image: https://url-de-tu-imagen.jpg
+image: https://picsum.photos/600/400
 ---
 ```
 
@@ -340,7 +340,15 @@ Embebe dibujos de Excalidraw usando la sintaxis de embed de Obsidian:
 - Tener el plugin Excalidraw instalado (para renderizado completo)
 - Sin el plugin, Slides Plus intenta extraer el SVG del archivo `.excalidraw.md`
 
-El dibujo se escala automaticamente al tamano del slide.
+El dibujo se escala automaticamente al 100% del ancho del slide, manteniendo su proporcion original.
+
+---
+
+## Excalidraw — Ejemplo Real
+
+El siguiente dibujo se ajusta automaticamente al ancho del slide:
+
+![[Gestión de Datos.excalidraw]]
 
 ---
 
