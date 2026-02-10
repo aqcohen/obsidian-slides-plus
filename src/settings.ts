@@ -41,6 +41,9 @@ export class SlidesSettingTab extends PluginSettingTab {
           .addOption("default", "Default")
           .addOption("dark", "Dark")
           .addOption("minimal", "Minimal")
+          .addOption("corporate", "Corporate")
+          .addOption("academic", "Academic")
+          .addOption("creative", "Creative")
           .setValue(this.plugin.settings.defaultTheme)
           .onChange(async (value) => {
             this.plugin.settings.defaultTheme = value;

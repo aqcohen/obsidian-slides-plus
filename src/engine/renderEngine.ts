@@ -43,6 +43,13 @@ export class SlideRenderEngine {
         .join(" "),
     });
 
+    // Apply per-slide token overrides from frontmatter
+    for (const [key, value] of Object.entries(slide.frontmatter)) {
+      if (key.startsWith("sp-") && typeof value === "string") {
+        slideEl.style.setProperty(`--${key}`, value);
+      }
+    }
+
     // Apply background
     this.applyBackground(slideEl, slide.frontmatter);
 
