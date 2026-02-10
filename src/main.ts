@@ -242,8 +242,8 @@ export default class SlidesPlugin extends Plugin {
       await presenterView.setDeck(deck, sourcePath, startIndex);
 
       // Wire presenter sync: when presentation navigates, update presenter
-      presView.onSlideChange = (index: number) => {
-        presenterView.syncToSlide(index);
+      presView.onSlideChange = (index: number, fragmentStep: number) => {
+        presenterView.syncToSlide(index, fragmentStep);
       };
     }
 
