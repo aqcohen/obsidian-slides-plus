@@ -20,9 +20,16 @@ import { isSlidesFile } from "./utils";
 
 export default class SlidesPlugin extends Plugin {
   settings: SlidesPluginSettings = DEFAULT_SETTINGS;
+  private googleFontsEl: HTMLLinkElement | null = null;
 
   async onload(): Promise<void> {
     await this.loadSettings();
+
+    // Load Google Fonts for themes that need them (e.g., Academic)
+    this.googleFontsEl = document.createElement("link");
+    this.googleFontsEl.rel = "stylesheet";
+    this.googleFontsEl.href = "https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lora:wght@400;600;700&display=swap";
+    document.head.appendChild(this.googleFontsEl);
 
     // Register views
     this.registerView(
@@ -182,6 +189,9 @@ export default class SlidesPlugin extends Plugin {
   }
 
   onunload(): void {
+    this.googleFontsEl?.remove();
+    this.googleFontsEl = null;
+
     // Detach all plugin views
     this.app.workspace.detachLeavesOfType(PREVIEW_VIEW_TYPE);
     this.app.workspace.detachLeavesOfType(PRESENTATION_VIEW_TYPE);
