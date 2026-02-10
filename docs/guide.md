@@ -350,14 +350,14 @@ A thumbnail grid showing all slides at a glance:
 ## PDF Export
 
 1. Run the command **Export slides to PDF**
-2. The browser print dialog opens with your slides pre-rendered
-3. Ensure these print settings:
+2. A self-contained HTML file opens in your system browser
+3. Press `Cmd/Ctrl + P` to print, then set:
    - **Layout**: Landscape
    - **Margins**: None
    - **Background graphics**: Enabled
 4. Save as PDF
 
-Each slide becomes one page.
+Each slide becomes one page. The exported HTML embeds all fonts (including LaTeX math fonts), theme styles, and respects your current dark/light mode.
 
 ---
 

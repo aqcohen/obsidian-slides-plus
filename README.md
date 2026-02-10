@@ -10,7 +10,7 @@ Slidev-inspired presentations inside Obsidian. Write your slides in Markdown, pr
 - **Transitions** — Slide, fade, slide-up, or none. Configurable per-slide.
 - **Presenter view** — Current slide, next slide preview, speaker notes, and a timer.
 - **Slide navigator** — Thumbnail grid for quick navigation.
-- **PDF export** — Print your deck to PDF via the command palette.
+- **PDF export** — Export to self-contained HTML, open in browser, and print/save as PDF. Supports dark mode, LaTeX, and Mermaid.
 - **Live preview** — Sidebar panel updates as you type.
 - **Per-slide styling** — Override any design token via frontmatter (`sp-slide-bg`, `sp-slide-accent`, `sp-font-heading`, etc.).
 
@@ -63,12 +63,12 @@ layout: quote
 
 | Theme | Description |
 |-------|-------------|
-| **Default** | Inherits your Obsidian colors |
-| **Dark** | Deep blue background, red accent |
-| **Minimal** | Clean, reduced, light weight headings |
-| **Corporate** | Professional sans-serif, blue accent |
-| **Academic** | Poppins + Lora, warm Anthropic-inspired palette |
-| **Creative** | Bold, high-contrast, vibrant rose accent |
+| `obsidian` | Adapts to Obsidian's light/dark mode |
+| `midnight` | Deep blue, fixed dark palette |
+| `paper` | Paper-and-ink, weight-based hierarchy |
+| `boardroom` | Professional, projection-optimized |
+| `academic` | Warm academic, Poppins + Lora |
+| `studio` | Bold artist's palette on black |
 
 Set a theme globally in **Settings → Slides Plus**, or per-deck in frontmatter:
 

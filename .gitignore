@@ -2,3 +2,9 @@ node_modules/
 main.js
 *.js.map
 .DS_Store
+data.json
+CLAUDE.md
+PLAN.md
+*.pdf
+*.html
+.opencode/
