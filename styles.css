@@ -646,13 +646,11 @@
 
 .sp-excalidraw-embed {
   width: 100%;
-  display: flex;
-  justify-content: center;
 }
 
-.sp-excalidraw-embed svg {
-  max-width: 100%;
-  max-height: 100%;
+/* Strategy 2 fallback: MarkdownRenderer wraps in an extra div */
+.sp-excalidraw-embed > div {
+  width: 100%;
 }
 
 .sp-excalidraw-placeholder-msg {

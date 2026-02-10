@@ -89,6 +89,8 @@ export async function resolveExcalidrawEmbeds(
         wrapper.className = "sp-excalidraw-embed";
         wrapper.appendChild(svg);
         placeholder.replaceWith(wrapper);
+        // Fit after insertion so we can measure the slide
+        fitSvgToSlide(svg, wrapper);
       } else {
         // Strategy 2: Try rendering the file content via MarkdownRenderer
         const rendered = await tryRenderFileEmbed(app, file, sourcePath);
@@ -97,6 +99,8 @@ export async function resolveExcalidrawEmbeds(
           wrapper.className = "sp-excalidraw-embed";
           wrapper.appendChild(rendered);
           placeholder.replaceWith(wrapper);
+          // Fit after insertion so we can measure the slide
+          rendered.querySelectorAll("svg").forEach((s) => fitSvgToSlide(s as SVGSVGElement, wrapper));
         } else {
           renderPlaceholder(
             placeholder as HTMLElement,
@@ -184,6 +188,47 @@ async function tryRenderFileEmbed(
     // Silently fail
   }
   return null;
+}
+
+/**
+ * Force an SVG to scale to the slide width, preserving aspect ratio.
+ * Measures the nearest .sp-slide ancestor and sets the SVG width in pixels.
+ */
+function fitSvgToSlide(svg: SVGSVGElement, container: HTMLElement): void {
+  // Read intrinsic dimensions before we remove them
+  const attrW = parseFloat(svg.getAttribute("width") || "0");
+  const attrH = parseFloat(svg.getAttribute("height") || "0");
+  const vb = svg.getAttribute("viewBox");
+
+  // Ensure viewBox exists — needed for SVG scaling to work
+  if (!vb && attrW > 0 && attrH > 0) {
+    svg.setAttribute("viewBox", `0 0 ${attrW} ${attrH}`);
+  }
+
+  // Remove fixed dimensions (attributes + inline styles)
+  svg.removeAttribute("width");
+  svg.removeAttribute("height");
+  svg.style.removeProperty("width");
+  svg.style.removeProperty("height");
+
+  // Measure the slide element width and set it directly in pixels
+  const slide = container.closest(".sp-slide");
+  if (slide) {
+    const padding = parseFloat(getComputedStyle(slide).paddingLeft || "0")
+      + parseFloat(getComputedStyle(slide).paddingRight || "0");
+    const availableWidth = slide.clientWidth - padding;
+    if (availableWidth > 0) {
+      svg.setAttribute("width", `${availableWidth}`);
+      svg.style.height = "auto";
+      svg.style.display = "block";
+      return;
+    }
+  }
+
+  // Fallback: use display block + 100% if we can't measure
+  svg.setAttribute("width", "100%");
+  svg.style.height = "auto";
+  svg.style.display = "block";
 }
 
 /**
