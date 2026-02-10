@@ -22,7 +22,8 @@ export interface Slide {
 export interface SlideFrontmatter {
   layout?: LayoutType;
   image?: string;
-  
+  fragments?: boolean;
+
   // Markdown-native properties (user-friendly)
   background?: string;              // Preset name, color, or image path
   "background-color"?: string;      // Override background color

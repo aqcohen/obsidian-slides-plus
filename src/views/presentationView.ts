@@ -16,6 +16,7 @@ export class PresentationView extends ItemView {
   private deck: SlidesDeck | null = null;
   private sourcePath: string = "";
   private currentIndex: number = 0;
+  private fragmentStep: number = 0;
   private renderEngine!: SlideRenderEngine;
   private transitionEngine: TransitionEngine;
   private themeEngine: ThemeEngine;
@@ -24,7 +25,7 @@ export class PresentationView extends ItemView {
   private boundKeyHandler: (e: KeyboardEvent) => void;
 
   /** Callback for external sync (e.g., presenter view) */
-  onSlideChange: ((index: number) => void) | null = null;
+  onSlideChange: ((index: number, fragmentStep: number) => void) | null = null;
 
   constructor(leaf: WorkspaceLeaf) {
     super(leaf);
@@ -109,12 +110,39 @@ export class PresentationView extends ItemView {
 
   private async navigate(delta: number): Promise<void> {
     if (!this.deck) return;
-    const newIndex = this.currentIndex + delta;
-    if (newIndex < 0 || newIndex >= this.deck.slides.length) return;
 
-    this.currentIndex = newIndex;
-    await this.renderCurrentSlide(true, delta > 0 ? "forward" : "backward");
-    this.onSlideChange?.(this.currentIndex);
+    if (delta > 0) {
+      const fragCount = this.getFragmentCount();
+      if (fragCount > 0 && this.fragmentStep < fragCount) {
+        this.fragmentStep++;
+        this.updateFragmentVisibility();
+        this.onSlideChange?.(this.currentIndex, this.fragmentStep);
+        return;
+      }
+      const newIndex = this.currentIndex + 1;
+      if (newIndex >= this.deck.slides.length) return;
+      this.currentIndex = newIndex;
+      this.fragmentStep = 0;
+      await this.renderCurrentSlide(true, "forward");
+      this.onSlideChange?.(this.currentIndex, this.fragmentStep);
+    } else {
+      const fragCount = this.getFragmentCount();
+      if (fragCount > 0 && this.fragmentStep > 0) {
+        this.fragmentStep--;
+        this.updateFragmentVisibility();
+        this.onSlideChange?.(this.currentIndex, this.fragmentStep);
+        return;
+      }
+      const newIndex = this.currentIndex - 1;
+      if (newIndex < 0) return;
+      this.currentIndex = newIndex;
+      await this.renderCurrentSlide(true, "backward");
+      // If previous slide has fragments, show them all revealed
+      const prevFragCount = this.getFragmentCount();
+      this.fragmentStep = prevFragCount;
+      this.updateFragmentVisibility();
+      this.onSlideChange?.(this.currentIndex, this.fragmentStep);
+    }
   }
 
   private async renderCurrentSlide(
@@ -147,7 +175,22 @@ export class PresentationView extends ItemView {
       this.transitionEngine.setImmediate(this.slideArea, slideEl);
     }
 
+    this.updateFragmentVisibility();
     this.updateProgressBar();
+  }
+
+  private getFragmentCount(): number {
+    if (!this.slideArea) return 0;
+    return this.slideArea.querySelectorAll(".sp-fragment").length;
+  }
+
+  private updateFragmentVisibility(): void {
+    if (!this.slideArea) return;
+    const fragments = this.slideArea.querySelectorAll<HTMLElement>(".sp-fragment");
+    fragments.forEach((el) => {
+      const idx = parseInt(el.dataset.fragmentIndex || "0", 10);
+      el.classList.toggle("sp-fragment-visible", idx < this.fragmentStep);
+    });
   }
 
   private handleKeydown(e: KeyboardEvent): void {
@@ -189,8 +232,9 @@ export class PresentationView extends ItemView {
     if (index < 0 || index >= this.deck.slides.length) return;
     const direction = index > this.currentIndex ? "forward" : "backward";
     this.currentIndex = index;
+    this.fragmentStep = 0;
     await this.renderCurrentSlide(true, direction);
-    this.onSlideChange?.(this.currentIndex);
+    this.onSlideChange?.(this.currentIndex, this.fragmentStep);
   }
 
   private updateProgressBar(): void {

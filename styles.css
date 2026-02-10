@@ -973,44 +973,38 @@
 }
 
 /* ============================================================
+   Fragments (incremental reveal)
+   ============================================================ */
+
+.sp-fragment {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.sp-fragment-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Always show fragments in non-presentation contexts */
+.sp-preview-slide-area .sp-fragment,
+.sp-navigator-thumb-preview .sp-fragment,
+.sp-presenter-next .sp-fragment,
+.sp-print-container .sp-fragment {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* ============================================================
    PDF Export
    ============================================================ */
 
-.sp-print-container {
-  position: fixed;
-  left: -9999px;
-  top: 0;
-  width: 100vw;
-  z-index: -1;
-}
+/* Positioning handled entirely by JS to avoid Obsidian CSS conflicts */
 
 .sp-print-slide {
-  width: 100%;
   page-break-after: always;
+  break-after: page;
   page-break-inside: avoid;
-}
-
-/* When printing, show only slides */
-@media print {
-  body.sp-printing>*:not(.sp-print-container) {
-    display: none !important;
-  }
-
-  body.sp-printing .sp-print-container {
-    position: static;
-    left: auto;
-    z-index: auto;
-  }
-
-  body.sp-printing .sp-print-slide {
-    border: none;
-    box-shadow: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  @page {
-    size: landscape;
-    margin: 0;
-  }
 }

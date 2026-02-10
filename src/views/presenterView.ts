@@ -11,6 +11,7 @@ export class PresenterView extends ItemView {
   private deck: SlidesDeck | null = null;
   private sourcePath: string = "";
   private currentIndex: number = 0;
+  private fragmentStep: number = 0;
   private renderEngine!: SlideRenderEngine;
   private themeEngine: ThemeEngine;
 
@@ -115,11 +116,12 @@ export class PresenterView extends ItemView {
   }
 
   /**
-   * Sync with presentation view's current slide index.
+   * Sync with presentation view's current slide and fragment state.
    */
-  async syncToSlide(index: number): Promise<void> {
-    if (index === this.currentIndex) return;
+  async syncToSlide(index: number, fragmentStep: number = 0): Promise<void> {
+    if (index === this.currentIndex && fragmentStep === this.fragmentStep) return;
     this.currentIndex = index;
+    this.fragmentStep = fragmentStep;
     await this.renderCurrentState();
   }
 
@@ -138,6 +140,13 @@ export class PresenterView extends ItemView {
         this.deck.globalConfig
       );
       this.slideComponents.push(comp);
+
+      // Apply fragment visibility to match presentation view
+      const fragments = this.currentSlideEl.querySelectorAll<HTMLElement>(".sp-fragment");
+      fragments.forEach((el) => {
+        const idx = parseInt(el.dataset.fragmentIndex || "0", 10);
+        el.classList.toggle("sp-fragment-visible", idx < this.fragmentStep);
+      });
     }
 
     // Render next slide preview

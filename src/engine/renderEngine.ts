@@ -102,6 +102,11 @@ export class SlideRenderEngine {
     // Post-render: resolve integrations
     await this.runPostRenderHooks(slideEl, allExcalidrawEmbeds);
 
+    // Tag top-level list items as fragments for incremental reveal
+    if (slide.frontmatter.fragments) {
+      this.applyFragments(slideEl);
+    }
+
     return component;
   }
 
@@ -154,6 +159,34 @@ export class SlideRenderEngine {
         this.sourcePath
       ),
     ]);
+  }
+
+  /**
+   * Tag top-level <li> elements with fragment classes for incremental reveal.
+   * Queries direct children of <ul>/<ol> that are direct children of the
+   * slide element or its slot <div>s. Nested sub-list items inherit parent visibility.
+   */
+  private applyFragments(slideEl: HTMLElement): void {
+    // Top-level lists: direct children of the slide or of slot divs
+    const containers: HTMLElement[] = [slideEl];
+    const slots = slideEl.querySelectorAll(":scope > .sp-slot");
+    for (let i = 0; i < slots.length; i++) {
+      containers.push(slots[i] as HTMLElement);
+    }
+
+    let index = 0;
+    for (const container of containers) {
+      const lists = container.querySelectorAll(":scope > ul, :scope > ol");
+      for (let i = 0; i < lists.length; i++) {
+        const items = lists[i].querySelectorAll(":scope > li");
+        for (let j = 0; j < items.length; j++) {
+          const item = items[j] as HTMLElement;
+          item.classList.add("sp-fragment");
+          item.dataset.fragmentIndex = String(index);
+          index++;
+        }
+      }
+    }
   }
 
   /**
