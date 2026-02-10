@@ -133,16 +133,15 @@ async function createSvgViaPlugin(
     const ea = excPlugin.ea || excPlugin.api;
     if (!ea) return null;
 
-    // Use the createSVG method
+    // Use the createSVG method — pass file.path (string), not TFile object
     if (typeof ea.createSVG === "function") {
       ea.reset();
-      ea.setFile(file);
-      return await ea.createSVG();
+      return await ea.createSVG(file.path);
     }
 
     // Alternative: try via the plugin's exportSVG
     if (typeof excPlugin.createSVG === "function") {
-      return await excPlugin.createSVG(file);
+      return await excPlugin.createSVG(file.path);
     }
   } catch (e) {
     console.warn("Slides Plus: Excalidraw API call failed", e);
