@@ -43,7 +43,7 @@
   --sp-radius: 4px;
   --sp-radius-lg: 8px;
   --sp-color-surface: var(--background-secondary);
-  --sp-color-code-bg: var(--code-background, rgba(0,0,0,0.05));
+  --sp-color-code-bg: var(--code-background, rgba(0, 0, 0, 0.05));
 }
 
 /* ============================================================
@@ -91,6 +91,7 @@
   font-weight: var(--sp-weight-heading);
   line-height: var(--sp-line-height-heading);
 }
+
 .sp-slide h2 {
   font-size: var(--sp-size-h2);
   margin-bottom: 0.4em;
@@ -99,6 +100,7 @@
   font-weight: var(--sp-weight-heading);
   line-height: var(--sp-line-height-heading);
 }
+
 .sp-slide h3 {
   font-size: var(--sp-size-h3);
   margin-bottom: 0.3em;
@@ -144,6 +146,36 @@
   margin-bottom: 0.3em;
 }
 
+/* Tables */
+.sp-slide table {
+  border-collapse: collapse;
+  width: auto;
+  margin: 1em auto;
+  font-size: 0.85em;
+}
+
+.sp-slide table th,
+.sp-slide table td {
+  padding: 0.5em 1em;
+  border: 1px solid var(--sp-slide-border);
+  text-align: left;
+}
+
+.sp-slide table th {
+  background: var(--sp-color-surface);
+  font-weight: 600;
+  font-family: var(--sp-font-heading);
+  color: var(--sp-slide-heading);
+}
+
+.sp-slide table tbody tr:nth-child(even) {
+  background: var(--sp-slide-bg);
+}
+
+.sp-slide table tbody tr:nth-child(odd) {
+  background: var(--sp-color-surface);
+}
+
 /* ============================================================
    Layouts
    ============================================================ */
@@ -182,6 +214,7 @@
 .sp-layout-two-cols .sp-slot-default {
   grid-column: 1;
 }
+
 .sp-layout-two-cols .sp-slot-right {
   grid-column: 2;
 }
@@ -197,6 +230,7 @@
 .sp-layout-image-right .sp-slot-default {
   grid-column: 1;
 }
+
 .sp-layout-image-right .sp-slot-image {
   grid-column: 2;
   display: flex;
@@ -218,6 +252,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .sp-layout-image-left .sp-slot-default {
   grid-column: 2;
 }
@@ -420,45 +455,75 @@
 .sp-anim-slide-from-right {
   animation: sp-slide-from-right var(--sp-transition-duration) ease both;
 }
+
 @keyframes sp-slide-from-right {
-  from { transform: translateX(100%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 /* Slide from left (backward navigation) */
 .sp-anim-slide-from-left {
   animation: sp-slide-from-left var(--sp-transition-duration) ease both;
 }
+
 @keyframes sp-slide-from-left {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 /* Fade in */
 .sp-anim-fade-in {
   animation: sp-fade-in var(--sp-transition-duration) ease both;
 }
+
 @keyframes sp-fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* Slide from bottom (slide-up forward) */
 .sp-anim-slide-from-bottom {
   animation: sp-slide-from-bottom var(--sp-transition-duration) ease both;
 }
+
 @keyframes sp-slide-from-bottom {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
 }
 
 /* Slide from top (slide-up backward) */
 .sp-anim-slide-from-top {
   animation: sp-slide-from-top var(--sp-transition-duration) ease both;
 }
+
 @keyframes sp-slide-from-top {
-  from { transform: translateY(-100%); }
-  to   { transform: translateY(0); }
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
 }
 
 /* ============================================================
@@ -665,11 +730,9 @@
 .sp-editor-separator-line {
   flex: 1;
   height: 2px;
-  background: linear-gradient(
-    to right,
-    var(--sp-slide-accent),
-    transparent
-  );
+  background: linear-gradient(to right,
+      var(--sp-slide-accent),
+      transparent);
   border-radius: 1px;
 }
 
@@ -692,7 +755,7 @@
 }
 
 /* Strategy 2 fallback: MarkdownRenderer wraps in an extra div */
-.sp-excalidraw-embed > div {
+.sp-excalidraw-embed>div {
   width: 100%;
 }
 
@@ -737,10 +800,6 @@
    Themes
    ============================================================ */
 
-/* Default theme — inherits Obsidian's native colors */
-.sp-theme-default {
-  /* Uses CSS variables from :root */
-}
 
 /* Dark theme */
 .sp-theme-dark {
@@ -802,6 +861,7 @@
   --sp-color-surface: #f8fafc;
   --sp-color-code-bg: #f1f5f9;
 }
+
 .theme-dark .sp-theme-corporate {
   --sp-slide-bg: #0f172a;
   --sp-slide-text: #cbd5e1;
@@ -817,22 +877,43 @@
 
 /* Academic theme — Anthropic-inspired: Poppins headings + Lora body */
 .sp-theme-academic {
-  --sp-slide-bg: #faf9f5;
-  --sp-slide-text: #141413;
-  --sp-slide-heading: #141413;
+  --sp-slide-bg: #fdfcf9;
+  --sp-slide-text: #1a1816;
+  --sp-slide-heading: #0f0e0d;
   --sp-slide-accent: #d97757;
-  --sp-slide-accent-2: #6a9bcc;
-  --sp-slide-accent-3: #788c5d;
-  --sp-slide-muted: #b0aea5;
-  --sp-slide-border: #e0ded8;
+  --sp-slide-accent-2: #5b8db8;
+  --sp-slide-accent-3: #6b7c52;
+  --sp-slide-muted: #a8a6a0;
+  --sp-slide-border: #e8e6e0;
   --sp-font-heading: "Poppins", Arial, sans-serif;
   --sp-font-body: "Lora", Georgia, serif;
-  --sp-weight-heading: 600;
-  --sp-line-height: 1.6;
+  --sp-weight-heading: 700;
+  --sp-line-height: 1.65;
+  --sp-slide-font-size: 26px;
   --sp-slide-padding: 56px;
-  --sp-color-surface: #f0efe9;
-  --sp-color-code-bg: #eceae4;
+  --sp-color-surface: #f5f4f0;
+  --sp-color-code-bg: #f0efe9;
 }
+
+/* Enhanced emphasis for academic theme */
+.sp-theme-academic .sp-slide em,
+.sp-theme-academic .sp-slide i {
+  font-style: italic;
+  color: var(--sp-slide-accent);
+}
+
+.sp-theme-academic .sp-slide strong em,
+.sp-theme-academic .sp-slide em strong {
+  color: var(--sp-slide-heading);
+  font-weight: 700;
+}
+
+.sp-theme-academic .sp-slide h1,
+.sp-theme-academic .sp-slide h2,
+.sp-theme-academic .sp-slide h3 {
+  letter-spacing: -0.02em;
+}
+
 .theme-dark .sp-theme-academic {
   --sp-slide-bg: #141413;
   --sp-slide-text: #faf9f5;
@@ -865,6 +946,7 @@
   --sp-color-surface: #f4f4f5;
   --sp-color-code-bg: #f4f4f5;
 }
+
 .theme-dark .sp-theme-creative {
   --sp-slide-bg: #09090b;
   --sp-slide-text: #e4e4e7;
@@ -898,7 +980,7 @@
 
 /* When printing, show only slides */
 @media print {
-  body.sp-printing > *:not(.sp-print-container) {
+  body.sp-printing>*:not(.sp-print-container) {
     display: none !important;
   }
 
