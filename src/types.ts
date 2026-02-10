@@ -61,7 +61,7 @@ export type TransitionType =
   | "none";
 
 export const DEFAULT_DECK_CONFIG: DeckConfig = {
-  theme: "default",
+  theme: "obsidian",
   transition: "slide",
   aspectRatio: "16/9",
   highlightStyle: "github",

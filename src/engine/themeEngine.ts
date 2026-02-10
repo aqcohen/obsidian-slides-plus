@@ -3,7 +3,7 @@
  * Themes are CSS classes applied to the root slide container.
  */
 export class ThemeEngine {
-  private currentTheme: string = "default";
+  private currentTheme: string = "obsidian";
   private styleEl: HTMLStyleElement | null = null;
 
   /**

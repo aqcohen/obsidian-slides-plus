@@ -11,7 +11,7 @@ export interface SlidesPluginSettings {
 }
 
 export const DEFAULT_SETTINGS: SlidesPluginSettings = {
-  defaultTheme: "default",
+  defaultTheme: "obsidian",
   defaultTransition: "slide",
   defaultAspectRatio: "16/9",
   fontSize: 24,
@@ -38,12 +38,12 @@ export class SlidesSettingTab extends PluginSettingTab {
       .setDesc("Theme used when no theme is specified in frontmatter")
       .addDropdown((dropdown) =>
         dropdown
-          .addOption("default", "Default")
-          .addOption("dark", "Dark")
-          .addOption("minimal", "Minimal")
-          .addOption("corporate", "Corporate")
+          .addOption("obsidian", "Obsidian")
+          .addOption("midnight", "Midnight")
+          .addOption("paper", "Paper")
+          .addOption("boardroom", "Boardroom")
           .addOption("academic", "Academic")
-          .addOption("creative", "Creative")
+          .addOption("studio", "Studio")
           .setValue(this.plugin.settings.defaultTheme)
           .onChange(async (value) => {
             this.plugin.settings.defaultTheme = value;

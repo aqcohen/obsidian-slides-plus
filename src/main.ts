@@ -28,7 +28,7 @@ export default class SlidesPlugin extends Plugin {
     // Load Google Fonts for themes that need them (e.g., Academic)
     this.googleFontsEl = document.createElement("link");
     this.googleFontsEl.rel = "stylesheet";
-    this.googleFontsEl.href = "https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lora:wght@400;600;700&display=swap";
+    this.googleFontsEl.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@400;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,600;6..72,700&family=Source+Serif+4:wght@400;600;700&family=Syne:wght@400;700;800&family=Work+Sans:wght@400;500;600&family=Poppins:wght@400;600;700&family=Lora:wght@400;600;700&display=swap";
     document.head.appendChild(this.googleFontsEl);
 
     // Register views

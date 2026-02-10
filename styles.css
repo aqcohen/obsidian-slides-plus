@@ -801,59 +801,84 @@
    ============================================================ */
 
 
-/* Dark theme */
-.sp-theme-dark {
-  --sp-slide-bg: #1a1a2e;
+/* Obsidian theme — adapts to Obsidian's light/dark mode */
+/* Light mode: inherits :root vars (Obsidian's native colors) */
+/* Dark mode: intentional overrides */
+.theme-dark .sp-theme-obsidian {
+  --sp-slide-bg: #1a1a1a;
   --sp-slide-text: #e0e0e0;
-  --sp-slide-heading: #ffffff;
-  --sp-slide-accent: #e94560;
-  --sp-slide-accent-2: #4cc9f0;
-  --sp-slide-accent-3: #7209b7;
+  --sp-slide-heading: #f0f0f0;
+  --sp-slide-accent: #7aa2f7;
+  --sp-slide-accent-2: #9ece6a;
+  --sp-slide-accent-3: #bb9af7;
   --sp-slide-muted: #888;
-  --sp-color-surface: #16213e;
-  --sp-color-code-bg: #16213e;
+  --sp-slide-border: #333;
+  --sp-color-surface: #242424;
+  --sp-color-code-bg: #242424;
 }
 
-/* Minimal theme */
-.sp-theme-minimal {
-  --sp-slide-bg: #fafafa;
-  --sp-slide-text: #333;
-  --sp-slide-heading: #111;
-  --sp-slide-accent: #333;
-  --sp-slide-accent-2: #666;
-  --sp-slide-accent-3: #999;
-  --sp-slide-muted: #999;
+/* Midnight theme — fixed deep-blue dark palette */
+.sp-theme-midnight {
+  --sp-slide-bg: #0f172a;
+  --sp-slide-text: #cbd5e1;
+  --sp-slide-heading: #f1f5f9;
+  --sp-slide-accent: #38bdf8;
+  --sp-slide-accent-2: #818cf8;
+  --sp-slide-accent-3: #34d399;
+  --sp-slide-muted: #64748b;
+  --sp-slide-border: #1e293b;
+  --sp-font-heading: "Outfit", system-ui, sans-serif;
+  --sp-font-body: "Outfit", system-ui, sans-serif;
+  --sp-weight-heading: 700;
+  --sp-color-surface: #1e293b;
+  --sp-color-code-bg: #1e293b;
+}
+
+/* Paper theme — restrained, weight-based hierarchy */
+.sp-theme-paper {
+  --sp-slide-bg: #fefefe;
+  --sp-slide-text: #2d3748;
+  --sp-slide-heading: #1a202c;
+  --sp-slide-accent: #4a5568;
+  --sp-slide-accent-2: #718096;
+  --sp-slide-accent-3: #a0aec0;
+  --sp-slide-muted: #a0aec0;
+  --sp-slide-border: #e2e8f0;
+  --sp-font-heading: "Newsreader", Georgia, serif;
+  --sp-font-body: "Source Serif 4", Georgia, serif;
+  --sp-weight-heading: 400;
   --sp-slide-font-size: 22px;
   --sp-slide-padding: 64px;
-  --sp-weight-heading: 400;
-  --sp-color-surface: #f0f0f0;
-  --sp-color-code-bg: #f0f0f0;
+  --sp-line-height: 1.7;
+  --sp-color-surface: #f7f7f5;
+  --sp-color-code-bg: #f7f7f5;
 }
 
-.theme-dark .sp-theme-minimal {
-  --sp-slide-bg: #1e1e1e;
-  --sp-slide-text: #d4d4d4;
-  --sp-slide-heading: #fff;
-  --sp-slide-accent: #d4d4d4;
-  --sp-slide-accent-2: #a0a0a0;
-  --sp-slide-accent-3: #777;
-  --sp-slide-muted: #666;
-  --sp-color-surface: #2a2a2a;
-  --sp-color-code-bg: #2a2a2a;
+.theme-dark .sp-theme-paper {
+  --sp-slide-bg: #1c1c1a;
+  --sp-slide-text: #d4d0c8;
+  --sp-slide-heading: #ebe7df;
+  --sp-slide-accent: #b8b4ac;
+  --sp-slide-accent-2: #8a8680;
+  --sp-slide-accent-3: #6b6862;
+  --sp-slide-muted: #6b6862;
+  --sp-slide-border: #2e2e2a;
+  --sp-color-surface: #252522;
+  --sp-color-code-bg: #252522;
 }
 
-/* Corporate theme */
-.sp-theme-corporate {
+/* Boardroom theme — professional, projection-optimized */
+.sp-theme-boardroom {
   --sp-slide-bg: #ffffff;
-  --sp-slide-text: #334155;
+  --sp-slide-text: #1e293b;
   --sp-slide-heading: #0f172a;
-  --sp-slide-accent: #2563eb;
-  --sp-slide-accent-2: #0d9488;
-  --sp-slide-accent-3: #7c3aed;
+  --sp-slide-accent: #0ea5e9;
+  --sp-slide-accent-2: #64748b;
+  --sp-slide-accent-3: #0284c7;
   --sp-slide-muted: #94a3b8;
   --sp-slide-border: #e2e8f0;
-  --sp-font-heading: "Segoe UI", system-ui, -apple-system, sans-serif;
-  --sp-font-body: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --sp-font-heading: "Inter", system-ui, sans-serif;
+  --sp-font-body: "Inter", system-ui, sans-serif;
   --sp-weight-heading: 600;
   --sp-slide-padding: 56px;
   --sp-radius: 6px;
@@ -862,17 +887,17 @@
   --sp-color-code-bg: #f1f5f9;
 }
 
-.theme-dark .sp-theme-corporate {
-  --sp-slide-bg: #0f172a;
+.theme-dark .sp-theme-boardroom {
+  --sp-slide-bg: #0c1222;
   --sp-slide-text: #cbd5e1;
   --sp-slide-heading: #f1f5f9;
-  --sp-slide-accent: #3b82f6;
-  --sp-slide-accent-2: #2dd4bf;
-  --sp-slide-accent-3: #a78bfa;
+  --sp-slide-accent: #0ea5e9;
+  --sp-slide-accent-2: #94a3b8;
+  --sp-slide-accent-3: #38bdf8;
   --sp-slide-muted: #64748b;
   --sp-slide-border: #1e293b;
-  --sp-color-surface: #1e293b;
-  --sp-color-code-bg: #1e293b;
+  --sp-color-surface: #162032;
+  --sp-color-code-bg: #162032;
 }
 
 /* Academic theme — Anthropic-inspired: Poppins headings + Lora body */
@@ -927,37 +952,24 @@
   --sp-color-code-bg: #1e1e1c;
 }
 
-/* Creative theme */
-.sp-theme-creative {
-  --sp-slide-bg: #fafafa;
-  --sp-slide-text: #18181b;
-  --sp-slide-heading: #09090b;
-  --sp-slide-accent: #e11d48;
-  --sp-slide-accent-2: #f59e0b;
-  --sp-slide-accent-3: #8b5cf6;
-  --sp-slide-muted: #71717a;
-  --sp-slide-border: #e4e4e7;
-  --sp-font-heading: "Avenir Next", "Avenir", system-ui, sans-serif;
-  --sp-font-body: system-ui, -apple-system, sans-serif;
+/* Studio theme — bold artist's palette on black */
+.sp-theme-studio {
+  --sp-slide-bg: #0a0a0a;
+  --sp-slide-text: #f0f0f0;
+  --sp-slide-heading: #ffffff;
+  --sp-slide-accent: #ff6b8b;
+  --sp-slide-accent-2: #00d4aa;
+  --sp-slide-accent-3: #ffd166;
+  --sp-slide-muted: #666;
+  --sp-slide-border: #2a2a2a;
+  --sp-font-heading: "Syne", system-ui, sans-serif;
+  --sp-font-body: "Work Sans", system-ui, sans-serif;
   --sp-weight-heading: 800;
   --sp-slide-font-size: 26px;
   --sp-size-h1: 2.8em;
   --sp-line-height-heading: 1.1;
-  --sp-color-surface: #f4f4f5;
-  --sp-color-code-bg: #f4f4f5;
-}
-
-.theme-dark .sp-theme-creative {
-  --sp-slide-bg: #09090b;
-  --sp-slide-text: #e4e4e7;
-  --sp-slide-heading: #fafafa;
-  --sp-slide-accent: #fb7185;
-  --sp-slide-accent-2: #fbbf24;
-  --sp-slide-accent-3: #a78bfa;
-  --sp-slide-muted: #52525b;
-  --sp-slide-border: #27272a;
-  --sp-color-surface: #18181b;
-  --sp-color-code-bg: #18181b;
+  --sp-color-surface: #1a1a1a;
+  --sp-color-code-bg: #1a1a1a;
 }
 
 /* ============================================================
