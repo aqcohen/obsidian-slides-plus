@@ -88,6 +88,7 @@ function parseSlides(body: string): RawSlide[] {
   let currentContent: string[] = [];
   let currentFrontmatter: SlideFrontmatter = {};
   let currentRaw: string[] = [];
+  let inCodeFence = false;
 
   let i = 0;
 
@@ -97,7 +98,12 @@ function parseSlides(body: string): RawSlide[] {
   while (i < lines.length) {
     const line = lines[i];
 
-    if (line.trim() === "---") {
+    // Track fenced code blocks (``` or ~~~)
+    if (line.trim().startsWith("```") || line.trim().startsWith("~~~")) {
+      inCodeFence = !inCodeFence;
+    }
+
+    if (!inCodeFence && line.trim() === "---") {
       // This is a slide separator. Save current slide.
       const contentStr = currentContent.join("\n");
       if (contentStr.trim() || slides.length === 0) {
@@ -303,6 +309,7 @@ export function getSlideIndexAtLine(
   let inGlobalFrontmatter = false;
   let pastGlobalFrontmatter = false;
   let inSlideFrontmatter = false;
+  let inCodeFence = false;
 
   for (let i = 0; i < Math.min(line, lines.length); i++) {
     const trimmed = lines[i].trim();
@@ -322,6 +329,12 @@ export function getSlideIndexAtLine(
     if (!pastGlobalFrontmatter && i > 0) {
       pastGlobalFrontmatter = true;
     }
+
+    // Track fenced code blocks (``` or ~~~)
+    if (trimmed.startsWith("```") || trimmed.startsWith("~~~")) {
+      inCodeFence = !inCodeFence;
+    }
+    if (inCodeFence) continue;
 
     // Track per-slide frontmatter (skip the closing ---)
     if (inSlideFrontmatter) {
