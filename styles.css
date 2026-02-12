@@ -900,27 +900,72 @@
   --sp-color-code-bg: #162032;
 }
 
-/* Academic theme — Anthropic-inspired: Poppins headings + Lora body */
+/* Academic theme — warm paper palette inspired by Apple Books */
 .sp-theme-academic {
-  --sp-slide-bg: #fdfcf9;
-  --sp-slide-text: #1a1816;
-  --sp-slide-heading: #0f0e0d;
-  --sp-slide-accent: #d97757;
-  --sp-slide-accent-2: #5b8db8;
-  --sp-slide-accent-3: #6b7c52;
-  --sp-slide-muted: #a8a6a0;
-  --sp-slide-border: #e8e6e0;
+  --sp-slide-bg: #f4f0e8;
+  --sp-slide-text: #37322d;
+  --sp-slide-heading: #2a2520;
+  --sp-slide-accent: #9a7250;
+  --sp-slide-accent-2: #6a7d62;
+  --sp-slide-accent-3: #876e54;
+  --sp-slide-muted: #8f8b83;
+  --sp-slide-border: #dad5ca;
   --sp-font-heading: "Poppins", Arial, sans-serif;
   --sp-font-body: "Lora", Georgia, serif;
   --sp-weight-heading: 700;
   --sp-line-height: 1.65;
   --sp-slide-font-size: 26px;
   --sp-slide-padding: 56px;
-  --sp-color-surface: #f5f4f0;
-  --sp-color-code-bg: #f0efe9;
+  --sp-color-surface: #ece8df;
+  --sp-color-code-bg: #e8e3d9;
 }
 
-/* Enhanced emphasis for academic theme */
+/* Accent bar + font features */
+.sp-theme-academic .sp-slide {
+  border-top: 3px solid var(--sp-slide-accent);
+  font-feature-settings: "liga" 1, "kern" 1;
+}
+
+/* Heading hierarchy */
+.sp-theme-academic .sp-slide h1,
+.sp-theme-academic .sp-slide h2,
+.sp-theme-academic .sp-slide h3 {
+  letter-spacing: -0.02em;
+}
+
+.sp-theme-academic .sp-slide h2,
+.sp-theme-academic .sp-slide h3 {
+  font-weight: 600;
+}
+
+/* Short accent rule under h2 */
+.sp-theme-academic .sp-slide h2::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: var(--sp-slide-accent);
+  margin-top: 0.25em;
+}
+
+/* Center accent rule in centered layouts */
+.sp-theme-academic .sp-layout-center h2::after,
+.sp-theme-academic .sp-layout-cover h2::after {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Cover layout — accent line under title */
+.sp-theme-academic .sp-layout-cover h1::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 2.5px;
+  background: var(--sp-slide-accent);
+  margin: 0.4em auto 0;
+}
+
+/* Emphasis */
 .sp-theme-academic .sp-slide em,
 .sp-theme-academic .sp-slide i {
   font-style: italic;
@@ -933,23 +978,70 @@
   font-weight: 700;
 }
 
-.sp-theme-academic .sp-slide h1,
-.sp-theme-academic .sp-slide h2,
-.sp-theme-academic .sp-slide h3 {
-  letter-spacing: -0.02em;
+/* Accent-colored list bullets */
+.sp-theme-academic .sp-slide ul > li::marker {
+  color: var(--sp-slide-accent);
 }
 
+/* Booktabs-style tables — horizontal rules only */
+.sp-theme-academic .sp-slide table {
+  border-top: 2px solid var(--sp-slide-heading);
+  border-bottom: 2px solid var(--sp-slide-heading);
+}
+
+.sp-theme-academic .sp-slide table th,
+.sp-theme-academic .sp-slide table td {
+  border: none;
+  border-bottom: 1px solid var(--sp-slide-border);
+}
+
+.sp-theme-academic .sp-slide table th {
+  border-bottom: 1.5px solid var(--sp-slide-heading);
+  background: transparent;
+  font-weight: 600;
+}
+
+.sp-theme-academic .sp-slide table tbody tr:nth-child(even),
+.sp-theme-academic .sp-slide table tbody tr:nth-child(odd) {
+  background: transparent;
+}
+
+/* Code blocks — left accent border */
+.sp-theme-academic .sp-slide pre {
+  border-left: 3px solid var(--sp-slide-accent);
+  border-radius: var(--sp-radius);
+  background: var(--sp-color-code-bg);
+}
+
+/* Inline code */
+.sp-theme-academic .sp-slide :not(pre) > code {
+  background: var(--sp-color-code-bg);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+/* Blockquotes — surface fill */
+.sp-theme-academic .sp-slide blockquote {
+  border-left: 3px solid var(--sp-slide-accent);
+  padding: 0.8em 1.2em;
+  background: var(--sp-color-surface);
+  border-radius: 0 var(--sp-radius) var(--sp-radius) 0;
+  color: var(--sp-slide-text);
+}
+
+/* Dark mode — warm charcoal, not black */
 .theme-dark .sp-theme-academic {
-  --sp-slide-bg: #141413;
-  --sp-slide-text: #faf9f5;
-  --sp-slide-heading: #faf9f5;
-  --sp-slide-accent: #d97757;
-  --sp-slide-accent-2: #6a9bcc;
-  --sp-slide-accent-3: #788c5d;
-  --sp-slide-muted: #b0aea5;
-  --sp-slide-border: #2a2a28;
-  --sp-color-surface: #1e1e1c;
-  --sp-color-code-bg: #1e1e1c;
+  --sp-slide-bg: #1c1b18;
+  --sp-slide-text: #d4cfc5;
+  --sp-slide-heading: #e4dfd6;
+  --sp-slide-accent: #c08a5e;
+  --sp-slide-accent-2: #7fa876;
+  --sp-slide-accent-3: #a68c6e;
+  --sp-slide-muted: #7a766e;
+  --sp-slide-border: #3a3734;
+  --sp-color-surface: #232220;
+  --sp-color-code-bg: #252421;
 }
 
 /* Studio theme — bold artist's palette on black */
