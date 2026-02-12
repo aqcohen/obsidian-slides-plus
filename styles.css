@@ -1044,6 +1044,106 @@
   --sp-color-code-bg: #252421;
 }
 
+/* Academic — Code typography */
+.sp-theme-academic {
+  --sp-font-code: "JetBrains Mono", var(--font-monospace);
+  --sp-size-code: 0.75em;
+}
+
+.sp-theme-academic .sp-slide pre {
+  line-height: 1.6;
+  padding: 1.1em 1.2em;
+}
+
+.sp-theme-academic .sp-slide pre code {
+  font-feature-settings: "liga" 1, "calt" 1;
+}
+
+/* Academic — Inline code refinement */
+.sp-theme-academic .sp-slide :not(pre) > code {
+  border: 1px solid var(--sp-slide-border);
+}
+
+/* Academic — Prism token colors (light mode) */
+.sp-theme-academic .sp-slide .token.keyword {
+  color: #8b3a3a;
+}
+.sp-theme-academic .sp-slide .token.string,
+.sp-theme-academic .sp-slide .token.attr-value {
+  color: #5a6e3a;
+}
+.sp-theme-academic .sp-slide .token.number {
+  color: #6b5b8a;
+}
+.sp-theme-academic .sp-slide .token.function {
+  color: #2a5a7a;
+}
+.sp-theme-academic .sp-slide .token.comment,
+.sp-theme-academic .sp-slide .token.prolog,
+.sp-theme-academic .sp-slide .token.doctype {
+  color: #9e968a;
+  font-style: italic;
+}
+.sp-theme-academic .sp-slide .token.operator,
+.sp-theme-academic .sp-slide .token.punctuation {
+  color: #6b6560;
+}
+.sp-theme-academic .sp-slide .token.property,
+.sp-theme-academic .sp-slide .token.attr-name {
+  color: #7a5a3a;
+}
+.sp-theme-academic .sp-slide .token.class-name,
+.sp-theme-academic .sp-slide .token.builtin {
+  color: #9a7250;
+}
+.sp-theme-academic .sp-slide .token.boolean,
+.sp-theme-academic .sp-slide .token.constant {
+  color: #6b5b8a;
+}
+.sp-theme-academic .sp-slide .token.regex {
+  color: #8b5a5a;
+}
+
+/* Academic — Prism token colors (dark mode) */
+.theme-dark .sp-theme-academic .sp-slide .token.keyword {
+  color: #d4a07a;
+}
+.theme-dark .sp-theme-academic .sp-slide .token.string,
+.theme-dark .sp-theme-academic .sp-slide .token.attr-value {
+  color: #a3b87a;
+}
+.theme-dark .sp-theme-academic .sp-slide .token.number {
+  color: #b0a0c8;
+}
+.theme-dark .sp-theme-academic .sp-slide .token.function {
+  color: #7ab8c8;
+}
+.theme-dark .sp-theme-academic .sp-slide .token.comment,
+.theme-dark .sp-theme-academic .sp-slide .token.prolog,
+.theme-dark .sp-theme-academic .sp-slide .token.doctype {
+  color: #6b665e;
+  font-style: italic;
+}
+.theme-dark .sp-theme-academic .sp-slide .token.operator,
+.theme-dark .sp-theme-academic .sp-slide .token.punctuation {
+  color: #8a847a;
+}
+.theme-dark .sp-theme-academic .sp-slide .token.property,
+.theme-dark .sp-theme-academic .sp-slide .token.attr-name {
+  color: #c8a878;
+}
+.theme-dark .sp-theme-academic .sp-slide .token.class-name,
+.theme-dark .sp-theme-academic .sp-slide .token.builtin {
+  color: #c08a5e;
+}
+.theme-dark .sp-theme-academic .sp-slide .token.boolean,
+.theme-dark .sp-theme-academic .sp-slide .token.constant {
+  color: #b0a0c8;
+}
+.theme-dark .sp-theme-academic .sp-slide .token.regex {
+  color: #c89090;
+}
+
 /* Studio theme — bold artist's palette on black */
 .sp-theme-studio {
   --sp-slide-bg: #0a0a0a;
@@ -1087,6 +1187,82 @@
   opacity: 1;
   transform: none;
   transition: none;
+}
+
+/* ============================================================
+   Code Block — Line Numbers & Highlights
+   ============================================================ */
+
+/* Line structure */
+.sp-code-line {
+  display: block;
+  padding: 0 1em 0 0;
+}
+
+.sp-code-line-numbered {
+  display: flex;
+}
+
+.sp-line-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Line numbers */
+.sp-line-number {
+  display: inline-block;
+  min-width: 3ch;
+  text-align: right;
+  padding-right: 1.5ch;
+  color: var(--sp-slide-muted);
+  opacity: 0.5;
+  user-select: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+  word-break: normal;
+}
+
+/* Static highlight */
+.sp-code-line.sp-line-highlight {
+  background: rgba(128, 128, 128, 0.12);
+  border-radius: 2px;
+}
+
+/* Dynamic highlight (active step) */
+.sp-code-line.sp-line-active {
+  background: rgba(128, 128, 128, 0.15);
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+/* Dim non-highlighted lines when a step is active */
+.sp-code-has-active-step .sp-code-line:not(.sp-line-active) {
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+/* Step markers are invisible layout elements */
+.sp-code-step-marker {
+  display: none !important;
+}
+
+/* Academic theme overrides — warm tints */
+.sp-theme-academic .sp-code-line.sp-line-highlight,
+.sp-theme-academic .sp-code-line.sp-line-active {
+  background: rgba(154, 114, 80, 0.12);
+}
+
+.theme-dark .sp-theme-academic .sp-code-line.sp-line-highlight,
+.theme-dark .sp-theme-academic .sp-code-line.sp-line-active {
+  background: rgba(192, 138, 94, 0.15);
+}
+
+/* Non-presentation contexts: show all dynamic highlights as static */
+.sp-preview-slide-area .sp-code-has-active-step .sp-code-line,
+.sp-navigator-thumb-preview .sp-code-has-active-step .sp-code-line,
+.sp-presenter-next .sp-code-has-active-step .sp-code-line,
+.sp-print-container .sp-code-has-active-step .sp-code-line {
+  opacity: 1;
 }
 
 /* ============================================================

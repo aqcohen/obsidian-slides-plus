@@ -15,6 +15,11 @@ import {
   PADDING_PRESETS,
   COLOR_PRESETS,
 } from "./presets";
+import {
+  extractCodeFenceMeta,
+  processCodeBlocks,
+  CodeMeta,
+} from "./codeBlockProcessor";
 
 /**
  * Renders a Slide into a DOM element using Obsidian's MarkdownRenderer.
@@ -102,10 +107,8 @@ export class SlideRenderEngine {
     // Post-render: resolve integrations
     await this.runPostRenderHooks(slideEl, allExcalidrawEmbeds);
 
-    // Tag top-level list items as fragments for incremental reveal
-    if (slide.frontmatter.fragments) {
-      this.applyFragments(slideEl);
-    }
+    // Tag fragments: list items (if fragments: true) and code step markers (always)
+    this.applyFragments(slideEl, !!slide.frontmatter.fragments);
 
     return component;
   }
@@ -131,14 +134,19 @@ export class SlideRenderEngine {
     markdown: string,
     container: HTMLElement,
     component: Component
-  ): Promise<void> {
+  ): Promise<{ codeMetas: CodeMeta[] }> {
+    const { cleanedMarkdown, codeMetas } = extractCodeFenceMeta(markdown);
     await MarkdownRenderer.render(
       this.app,
-      markdown,
+      cleanedMarkdown,
       container,
       this.sourcePath,
       component
     );
+    if (codeMetas.length > 0) {
+      processCodeBlocks(container, codeMetas);
+    }
+    return { codeMetas };
   }
 
   private async runPostRenderHooks(
@@ -162,30 +170,41 @@ export class SlideRenderEngine {
   }
 
   /**
-   * Tag top-level <li> elements with fragment classes for incremental reveal.
-   * Queries direct children of <ul>/<ol> that are direct children of the
-   * slide element or its slot <div>s. Nested sub-list items inherit parent visibility.
+   * Tag fragment elements for incremental reveal.
+   * List items are tagged only when `includeListItems` is true (fragments: true).
+   * Code step markers (.sp-code-step-marker) are always tagged — the {1-3|5-7}
+   * syntax is the opt-in for code blocks.
    */
-  private applyFragments(slideEl: HTMLElement): void {
-    // Top-level lists: direct children of the slide or of slot divs
-    const containers: HTMLElement[] = [slideEl];
-    const slots = slideEl.querySelectorAll(":scope > .sp-slot");
-    for (let i = 0; i < slots.length; i++) {
-      containers.push(slots[i] as HTMLElement);
-    }
-
+  private applyFragments(slideEl: HTMLElement, includeListItems: boolean): void {
     let index = 0;
-    for (const container of containers) {
-      const lists = container.querySelectorAll(":scope > ul, :scope > ol");
-      for (let i = 0; i < lists.length; i++) {
-        const items = lists[i].querySelectorAll(":scope > li");
-        for (let j = 0; j < items.length; j++) {
-          const item = items[j] as HTMLElement;
-          item.classList.add("sp-fragment");
-          item.dataset.fragmentIndex = String(index);
-          index++;
+
+    if (includeListItems) {
+      // Top-level lists: direct children of the slide or of slot divs
+      const containers: HTMLElement[] = [slideEl];
+      const slots = slideEl.querySelectorAll(":scope > .sp-slot");
+      for (let i = 0; i < slots.length; i++) {
+        containers.push(slots[i] as HTMLElement);
+      }
+
+      for (const container of containers) {
+        const lists = container.querySelectorAll(":scope > ul, :scope > ol");
+        for (let i = 0; i < lists.length; i++) {
+          const items = lists[i].querySelectorAll(":scope > li");
+          for (let j = 0; j < items.length; j++) {
+            const item = items[j] as HTMLElement;
+            item.classList.add("sp-fragment");
+            item.dataset.fragmentIndex = String(index);
+            index++;
+          }
         }
       }
+    }
+
+    // Always tag code step markers (they already have sp-fragment class from processCodeBlocks)
+    const stepMarkers = slideEl.querySelectorAll<HTMLElement>(".sp-code-step-marker");
+    for (let i = 0; i < stepMarkers.length; i++) {
+      stepMarkers[i].dataset.fragmentIndex = String(index);
+      index++;
     }
   }
 

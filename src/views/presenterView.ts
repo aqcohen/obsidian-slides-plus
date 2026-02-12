@@ -2,6 +2,7 @@ import { ItemView, WorkspaceLeaf, Component } from "obsidian";
 import { PRESENTER_VIEW_TYPE, SlidesDeck } from "../types";
 import { SlideRenderEngine } from "../engine/renderEngine";
 import { ThemeEngine } from "../engine/themeEngine";
+import { updateFragments } from "../engine/codeBlockProcessor";
 
 /**
  * Presenter view: shows current slide, next slide preview,
@@ -141,12 +142,8 @@ export class PresenterView extends ItemView {
       );
       this.slideComponents.push(comp);
 
-      // Apply fragment visibility to match presentation view
-      const fragments = this.currentSlideEl.querySelectorAll<HTMLElement>(".sp-fragment");
-      fragments.forEach((el) => {
-        const idx = parseInt(el.dataset.fragmentIndex || "0", 10);
-        el.classList.toggle("sp-fragment-visible", idx < this.fragmentStep);
-      });
+      // Apply fragment visibility (list items + code highlights) to match presentation view
+      updateFragments(this.currentSlideEl, this.fragmentStep);
     }
 
     // Render next slide preview

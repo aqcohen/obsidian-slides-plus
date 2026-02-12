@@ -7,6 +7,7 @@ import {
 import { SlideRenderEngine } from "../engine/renderEngine";
 import { TransitionEngine } from "../engine/transitionEngine";
 import { ThemeEngine } from "../engine/themeEngine";
+import { updateFragments } from "../engine/codeBlockProcessor";
 
 /**
  * Fullscreen presentation view.
@@ -186,11 +187,7 @@ export class PresentationView extends ItemView {
 
   private updateFragmentVisibility(): void {
     if (!this.slideArea) return;
-    const fragments = this.slideArea.querySelectorAll<HTMLElement>(".sp-fragment");
-    fragments.forEach((el) => {
-      const idx = parseInt(el.dataset.fragmentIndex || "0", 10);
-      el.classList.toggle("sp-fragment-visible", idx < this.fragmentStep);
-    });
+    updateFragments(this.slideArea, this.fragmentStep);
   }
 
   private handleKeydown(e: KeyboardEvent): void {
