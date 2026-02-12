@@ -4,7 +4,9 @@ main.js
 .DS_Store
 data.json
 CLAUDE.md
+AGENTS
 PLAN.md
 *.pdf
 *.html
 .opencode/
+.claude/

@@ -1,69 +1,42 @@
-# v0.1.2: Markdown-Native YAML Schema + Academic Theme Improvements
+# v0.1.4: PDF Export Redesign + Theme & Fragment Improvements
 
-## 🎨 New Features
+## PDF Export — Complete Rewrite
 
-### Markdown-Native YAML Schema
+The PDF export has been rebuilt from scratch. The old approach (Electron's `window.print()`) was blocked by Obsidian's plugin sandbox.
 
-User-friendly frontmatter properties (no CSS knowledge required):
+**New approach:**
+1. Run **Export slides to PDF** from the command palette
+2. A self-contained HTML file opens in your system browser
+3. Press `Cmd/Ctrl + P` → Save as PDF
 
-**Background Presets**
+**What's included in the exported HTML:**
+- All slide content with correct layouts
+- Theme styles with dark/light mode support
+- LaTeX math with embedded MathJax fonts (base64-inlined)
+- Mermaid diagrams
+- Excalidraw drawings (SVG)
+- Google Fonts used by themes
+- Print-optimized CSS (`@page landscape`, page breaks)
 
-```yaml
-background: sunset  # Gradient presets
-background: ocean
-background: forest
-```
+## Theme Dark Mode in Exports
 
-**Text Styling**
+Exported HTML now respects your current Obsidian dark/light mode. If you're using dark mode with the `academic` theme, the export renders with the dark palette.
 
-```yaml
-text-size: large        # small | normal | large | huge
-text-align: center
-text-color: white
-```
+## Fragment Support
 
-**Colors & Fonts**
+- Incremental reveal with `fragments: true` in per-slide frontmatter
+- Keyboard navigation: arrow keys advance/retreat fragments before changing slides
+- Presenter view syncs fragment state
+- Fragments are always fully visible in PDF exports
 
-```yaml
-accent-color: purple    # Named colors or hex codes
-heading-font: serif     # Preset font families
-body-font: sans
-```
+## Excalidraw Fix
 
-**Available Presets:**
+- Fixed Excalidraw SVG rendering — uses correct `ea.createSVG(path)` API
 
-- **Backgrounds**: sunset, ocean, forest, fire, night, aurora, cosmic
-- **Colors**: blue, red, green, purple, orange, pink, yellow, teal
-- **Text sizes**: small, normal, large, huge
-- **Fonts**: serif, sans, mono (plus specific font names)
+## Theme Redesign
 
-## 🎓 Academic Theme Improvements
-
-- **Better typography**: 26px base font, weight 700 headings
-- **Enhanced readability**: Optimized line-height (1.65) for serif body text
-- **Refined colors**: Warmer cream background (#fdfcf9), improved contrast
-- **Italic emphasis**: Accent color for emphasis in body text
-- **Letter-spacing**: Optical adjustments for headings (-0.02em)
-
-## 📊 Table Styles
-
-Tables now render properly with:
-
-- Clean borders and headers
-- Striped rows for readability  
-- Responsive sizing
-- Theme-aware colors
-
-## Backwards Compatibility
-
-✅ Old `sp-*` custom properties still work  
-✅ Custom CSS available via `custom-css:` for power users
-
-## Documentation
-
-- [Frontmatter Reference](docs/frontmatter-reference.md) - Complete guide
-- [test-yaml-schema.md](test-yaml-schema.md) - Examples
+- All 6 themes (obsidian, midnight, paper, boardroom, academic, studio) redesigned with intentional palettes and font pairings
 
 ---
 
-**Full Changelog**: <https://github.com/aqcohen/obsidian-slides-plus/compare/v0.1.1...v0.1.2>
+**Full Changelog**: <https://github.com/aqcohen/obsidian-slides-plus/compare/v0.1.2...v0.1.4>
