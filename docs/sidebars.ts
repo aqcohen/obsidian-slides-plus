@@ -1,17 +1,20 @@
-import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
+import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 
 const sidebars: SidebarsConfig = {
   docs: [
     'intro',
     'getting-started',
+    'guide',
     'features',
     'themes',
     'layouts',
     'frontmatter',
+    'frontmatter-reference',
     'integrations',
     'export',
+    'roadmap',
   ],
-  
+
   developer: [
     {
       type: 'category',
@@ -27,7 +30,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
   ],
-  
+
   api: [
     {
       type: 'category',

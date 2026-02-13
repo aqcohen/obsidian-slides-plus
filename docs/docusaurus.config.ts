@@ -19,6 +19,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           routeBasePath: '/',
+          path: 'docs',
           showLastUpdateTime: true,
           showLastUpdateAuthor: true,
         },
