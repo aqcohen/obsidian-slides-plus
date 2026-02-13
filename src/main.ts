@@ -52,6 +52,28 @@ export default class SlidesPlugin extends Plugin {
     // Register editor extension for slide separator decorations
     this.registerEditorExtension([slideSeparatorPlugin]);
 
+    // Strip per-slide frontmatter rendered as Setext h2 in reading view.
+    // Markdown interprets "key: value\n---" as an <h2>, so we detect
+    // h2 elements whose text is all YAML key:value lines and remove them.
+    this.registerMarkdownPostProcessor((el, ctx) => {
+      if (!ctx.frontmatter?.slides) return;
+
+      el.querySelectorAll("h2").forEach((h2) => {
+        const text = h2.textContent?.trim();
+        if (!text) return;
+
+        const lines = text.split("\n");
+        const allYaml = lines.every((l) => {
+          const t = l.trim();
+          return !t || /^[\w-]+\s*:/.test(t);
+        });
+
+        if (allYaml && lines.some((l) => /^[\w-]+\s*:/.test(l.trim()))) {
+          h2.remove();
+        }
+      });
+    });
+
     // Register commands
     this.addCommand({
       id: "start-presentation",

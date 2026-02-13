@@ -6,11 +6,15 @@ import {
   EditorView,
   WidgetType,
 } from "@codemirror/view";
-import { RangeSetBuilder } from "@codemirror/state";
+import { RangeSetBuilder, Text } from "@codemirror/state";
 
 /**
  * CM6 ViewPlugin that replaces --- slide separators with visual dividers
  * showing the slide number. Only active in files with `slides: true` frontmatter.
+ *
+ * Handles:
+ * - Per-slide frontmatter (Slidev-style ---/YAML/--- blocks)
+ * - Code fences (``` / ~~~) — skips --- inside them
  */
 export const slideSeparatorPlugin = ViewPlugin.fromClass(
   class {
@@ -37,42 +41,83 @@ export const slideSeparatorPlugin = ViewPlugin.fromClass(
         return builder.finish();
       }
 
-      // Find slide separator lines (--- on its own line, after the frontmatter)
-      let inFrontmatter = false;
-      let pastFrontmatter = false;
+      let inGlobalFrontmatter = false;
+      let pastGlobalFrontmatter = false;
+      let inCodeFence = false;
       let slideNumber = 1;
 
-      for (let i = 1; i <= doc.lines; i++) {
+      let i = 1;
+      while (i <= doc.lines) {
         const line = doc.line(i);
         const trimmed = line.text.trim();
 
+        // Global frontmatter tracking
         if (i === 1 && trimmed === "---") {
-          inFrontmatter = true;
+          inGlobalFrontmatter = true;
+          i++;
           continue;
         }
 
-        if (inFrontmatter && trimmed === "---") {
-          inFrontmatter = false;
-          pastFrontmatter = true;
+        if (inGlobalFrontmatter && trimmed === "---") {
+          inGlobalFrontmatter = false;
+          pastGlobalFrontmatter = true;
+          i++;
           continue;
         }
 
-        if (inFrontmatter) continue;
+        if (inGlobalFrontmatter) {
+          i++;
+          continue;
+        }
 
-        if (!pastFrontmatter && i > 1) {
-          pastFrontmatter = true;
+        if (!pastGlobalFrontmatter && i > 1) {
+          pastGlobalFrontmatter = true;
+        }
+
+        // Track fenced code blocks (``` or ~~~)
+        if (trimmed.startsWith("```") || trimmed.startsWith("~~~")) {
+          inCodeFence = !inCodeFence;
+        }
+
+        if (inCodeFence) {
+          i++;
+          continue;
         }
 
         // Slide separator
-        if (pastFrontmatter && trimmed === "---") {
+        if (pastGlobalFrontmatter && trimmed === "---") {
           slideNumber++;
-          builder.add(
-            line.from,
-            line.to,
-            Decoration.replace({
-              widget: new SlideSeparatorWidget(slideNumber),
-            })
-          );
+
+          // Look ahead for per-slide frontmatter
+          const fmResult = tryParseFrontmatterLines(doc, i + 1);
+          if (fmResult) {
+            // Opening --- gets the separator widget (single-line replace)
+            builder.add(
+              line.from,
+              line.to,
+              Decoration.replace({
+                widget: new SlideSeparatorWidget(slideNumber, fmResult.summary),
+              })
+            );
+            // Hide each YAML line and the closing --- individually
+            // (CM6 plugins can't replace across line breaks)
+            for (let j = i + 1; j <= fmResult.endLineNumber; j++) {
+              const fmLine = doc.line(j);
+              builder.add(fmLine.from, fmLine.to, Decoration.replace({}));
+            }
+            i = fmResult.endLineNumber + 1;
+          } else {
+            builder.add(
+              line.from,
+              line.to,
+              Decoration.replace({
+                widget: new SlideSeparatorWidget(slideNumber),
+              })
+            );
+            i++;
+          }
+        } else {
+          i++;
         }
       }
 
@@ -84,8 +129,62 @@ export const slideSeparatorPlugin = ViewPlugin.fromClass(
   }
 );
 
+/**
+ * Look ahead from `startLineNum` (1-based) to see if consecutive lines
+ * form per-slide frontmatter closed by `---`.
+ * Mirrors tryParseFrontmatter() in slideParser.ts.
+ */
+function tryParseFrontmatterLines(
+  doc: Text,
+  startLineNum: number
+): { endLineNumber: number; summary: string } | null {
+  const keys: string[] = [];
+
+  for (let i = startLineNum; i <= doc.lines; i++) {
+    const trimmed = doc.line(i).text.trim();
+
+    // Closing ---
+    if (trimmed === "---") {
+      if (keys.length === 0) return null; // empty = just another separator
+      return { endLineNumber: i, summary: keys.join(", ") };
+    }
+
+    // Blank lines are OK inside frontmatter
+    if (trimmed === "") continue;
+
+    // Check YAML-like
+    if (looksLikeYaml(trimmed)) {
+      // Extract key for summary
+      const colonIdx = trimmed.indexOf(":");
+      if (colonIdx > 0) {
+        const key = trimmed.slice(0, colonIdx).trim();
+        const val = trimmed.slice(colonIdx + 1).trim();
+        keys.push(val && val.length <= 20 ? `${key}: ${val}` : key);
+      }
+      // YAML comments (#) — skip, don't add to summary
+    } else {
+      return null; // Not YAML
+    }
+  }
+
+  // Reached EOF without closing --- → not frontmatter
+  return null;
+}
+
+/** Heuristic: does this line look like a YAML key: value pair or comment? */
+function looksLikeYaml(line: string): boolean {
+  if (line.startsWith("#")) return true;
+  const colonIndex = line.indexOf(":");
+  if (colonIndex <= 0) return false;
+  const key = line.slice(0, colonIndex).trim();
+  return /^[\w-]+$/.test(key);
+}
+
 class SlideSeparatorWidget extends WidgetType {
-  constructor(private slideNumber: number) {
+  constructor(
+    private slideNumber: number,
+    private frontmatterSummary?: string
+  ) {
     super();
   }
 
@@ -103,10 +202,20 @@ class SlideSeparatorWidget extends WidgetType {
     wrapper.appendChild(line);
     wrapper.appendChild(label);
 
+    if (this.frontmatterSummary) {
+      const badge = document.createElement("span");
+      badge.className = "sp-editor-frontmatter";
+      badge.textContent = `\u00b7 ${this.frontmatterSummary}`;
+      wrapper.appendChild(badge);
+    }
+
     return wrapper;
   }
 
   eq(other: SlideSeparatorWidget): boolean {
-    return this.slideNumber === other.slideNumber;
+    return (
+      this.slideNumber === other.slideNumber &&
+      this.frontmatterSummary === other.frontmatterSummary
+    );
   }
 }

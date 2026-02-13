@@ -746,6 +746,13 @@
   border-radius: 3px;
 }
 
+.sp-editor-frontmatter {
+  font-size: 0.7em;
+  color: var(--sp-slide-muted);
+  opacity: 0.7;
+  margin-left: 4px;
+}
+
 /* ============================================================
    Excalidraw Embeds
    ============================================================ */
