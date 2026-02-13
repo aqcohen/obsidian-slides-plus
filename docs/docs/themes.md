@@ -46,7 +46,7 @@ theme: midnight
 
 ## Theme Details
 
-### Obsidian (Default)
+### Obsidian
 
 Adapts to your Obsidian appearance setting:
 - Light mode: Clean white background
