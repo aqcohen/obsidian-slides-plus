@@ -20,7 +20,7 @@ Thank you for your interest in contributing!
 
 ## Development Setup
 
-See [Development Setup](./developer/setup.md) for detailed instructions.
+See [Development Setup](./setup.md) for detailed instructions.
 
 ## Code Style
 
