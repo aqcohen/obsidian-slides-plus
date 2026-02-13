@@ -1283,3 +1283,252 @@
   break-after: page;
   page-break-inside: avoid;
 }
+
+/* ============================================================
+   Academic Theme — Scholarly Elements
+   ============================================================ */
+
+/* #1 Footnotes */
+.sp-theme-academic .sp-slide .footnote-ref {
+  vertical-align: super;
+  font-size: 0.75em;
+  color: var(--sp-slide-accent);
+  text-decoration: none;
+}
+
+.sp-theme-academic .sp-slide .footnotes {
+  margin-top: auto;
+  padding-top: 0.8em;
+  border-top: 1px solid var(--sp-slide-border);
+  font-size: 0.7em;
+  color: var(--sp-slide-muted);
+}
+
+/* #2 Figure captions — CSS counter auto-numbering */
+.sp-theme-academic .sp-slide {
+  counter-reset: sp-figure;
+}
+
+.sp-theme-academic .sp-slide p:has(> img:only-child) {
+  counter-increment: sp-figure;
+  text-align: center;
+}
+
+.sp-theme-academic .sp-slide p:has(> img:only-child) + p:has(> em:only-child) {
+  text-align: center;
+  font-size: 0.8em;
+  color: var(--sp-slide-muted);
+  margin-top: -0.5em;
+}
+
+.sp-theme-academic .sp-slide p:has(> img:only-child) + p:has(> em:only-child) em {
+  font-style: normal;
+  color: inherit;
+}
+
+.sp-theme-academic .sp-slide p:has(> img:only-child) + p:has(> em:only-child)::before {
+  content: "Figure " counter(sp-figure) ". ";
+  font-weight: 600;
+  color: var(--sp-slide-accent);
+}
+
+/* #3 Definition lists — bold term + indented description */
+.sp-theme-academic .sp-slide p:has(> strong:only-child) {
+  margin-bottom: 0.2em;
+}
+
+.sp-theme-academic .sp-slide p:has(> strong:only-child) + p {
+  padding-left: 1.2em;
+  border-left: 2px solid var(--sp-slide-accent);
+  margin-top: 0;
+  margin-bottom: 0.8em;
+}
+
+/* #4 Theorem/proof callouts */
+.sp-theme-academic .sp-slide .callout[data-callout="theorem"],
+.sp-theme-academic .sp-slide .callout[data-callout="definition"],
+.sp-theme-academic .sp-slide .callout[data-callout="lemma"],
+.sp-theme-academic .sp-slide .callout[data-callout="proof"] {
+  background: var(--sp-color-surface);
+  border-radius: var(--sp-radius);
+  padding: 0.8em 1em;
+  margin: 0.5em 0;
+  border-left: 3px solid;
+}
+
+.sp-theme-academic .sp-slide .callout[data-callout="theorem"] {
+  border-left-color: #9a7250;
+}
+
+.sp-theme-academic .sp-slide .callout[data-callout="definition"] {
+  border-left-color: #6a7d62;
+}
+
+.sp-theme-academic .sp-slide .callout[data-callout="lemma"] {
+  border-left-color: #876e54;
+}
+
+.sp-theme-academic .sp-slide .callout[data-callout="proof"] {
+  border-left-color: var(--sp-slide-muted);
+  font-style: italic;
+}
+
+.sp-theme-academic .sp-slide .callout[data-callout="proof"]::after {
+  content: "\25A1";
+  display: block;
+  text-align: right;
+  font-style: normal;
+  font-size: 1.2em;
+  margin-top: 0.3em;
+}
+
+/* Dark mode overrides for callout borders */
+.theme-dark .sp-theme-academic .sp-slide .callout[data-callout="theorem"] {
+  border-left-color: #c08a5e;
+}
+
+.theme-dark .sp-theme-academic .sp-slide .callout[data-callout="definition"] {
+  border-left-color: #7fa876;
+}
+
+.theme-dark .sp-theme-academic .sp-slide .callout[data-callout="lemma"] {
+  border-left-color: #a68c6e;
+}
+
+/* ============================================================
+   #5 Citations (all themes)
+   ============================================================ */
+
+.sp-citation {
+  font-size: 0.8em;
+  color: var(--sp-slide-accent, var(--interactive-accent));
+  background: color-mix(in srgb, var(--sp-slide-accent, var(--interactive-accent)) 12%, transparent);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   #7 Reading View — Slide Separators
+   ============================================================ */
+
+.sp-reading-separator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  margin: 8px 0;
+  user-select: none;
+}
+
+.sp-reading-separator-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right,
+      var(--interactive-accent),
+      transparent);
+  border-radius: 1px;
+}
+
+/* ============================================================
+   #11 Editor — Speaker Note Lines
+   ============================================================ */
+
+.sp-editor-note-line {
+  color: var(--text-muted) !important;
+  font-style: italic;
+  font-size: 0.88em;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   #12 Header / Footer
+   ============================================================ */
+
+.sp-slide-header {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 0.65em;
+  color: var(--sp-slide-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+
+.sp-slide-footer {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  font-size: 0.65em;
+  color: var(--sp-slide-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+
+/* ============================================================
+   #13 Progress Bar — Fallback accent
+   ============================================================ */
+
+.sp-progress-fill {
+  background: var(--sp-slide-accent, var(--interactive-accent));
+}
+
+/* ============================================================
+   #14 Keyboard Shortcuts Overlay
+   ============================================================ */
+
+.sp-keyboard-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.sp-keyboard-overlay-visible {
+  display: flex;
+}
+
+.sp-keyboard-overlay-card {
+  background: var(--background-primary, #1a1a2e);
+  color: var(--text-normal, #e0e0e0);
+  border-radius: 12px;
+  padding: 32px 40px;
+  max-width: 420px;
+  width: 90%;
+}
+
+.sp-keyboard-overlay-card h3 {
+  margin: 0 0 16px;
+  font-size: 1.1em;
+  text-align: center;
+  color: var(--text-normal, #f0f0f0);
+}
+
+.sp-keyboard-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  align-items: center;
+}
+
+.sp-keyboard-grid kbd {
+  display: inline-block;
+  background: var(--background-secondary, #2a2a3e);
+  border: 1px solid var(--background-modifier-border, #444);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-family: var(--font-monospace);
+  font-size: 0.85em;
+  text-align: center;
+  min-width: 2em;
+}
+
+.sp-keyboard-grid span {
+  font-size: 0.9em;
+  color: var(--text-muted, #aaa);
+}
