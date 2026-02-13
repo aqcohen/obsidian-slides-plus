@@ -319,11 +319,25 @@ export function getSlideIndexAtLine(
   let inSlideFrontmatter = false;
   let inCodeFence = false;
 
+  // Find where global frontmatter starts (only if --- is at the very beginning)
+  // Check if file starts with ---
+  const trimmedStart = normalized.trimStart();
+  let globalFmStart = -1;
+  if (trimmedStart.startsWith("---")) {
+    // Find the line index where --- first appears
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].trim() === "---") {
+        globalFmStart = i;
+        break;
+      }
+    }
+  }
+
   for (let i = 0; i < Math.min(line, lines.length); i++) {
     const trimmed = lines[i].trim();
 
-    // Track global frontmatter
-    if (i === 0 && trimmed === "---") {
+    // Track global frontmatter - starts at first --- only if at beginning of file
+    if (globalFmStart !== -1 && i === globalFmStart) {
       inGlobalFrontmatter = true;
       continue;
     }

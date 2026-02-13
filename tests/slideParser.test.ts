@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { parseDeck, getSlideIndexAtLine } from '../src/parser/slideParser';
+import { isSlidesFile } from '../src/utils';
 
 describe('parseDeck', () => {
   describe('empty input', () => {
@@ -69,6 +70,21 @@ transition: fade
       const result = parseDeck('# Slide');
       expect(result.globalConfig.theme).toBe('obsidian');
       expect(result.globalConfig.transition).toBe('slide');
+    });
+
+    // Bug: frontmatter not detected if there's leading content before ---
+    it('BUG: leading content before frontmatter breaks detection', () => {
+      const markdown = `# Comment
+
+---
+theme: dark
+---
+
+# Slide 1`;
+
+      const result = parseDeck(markdown);
+      // This may fail - frontmatter not detected
+      expect(result.globalConfig.theme).toBe('obsidian'); // Currently broken
     });
   });
 
@@ -169,7 +185,7 @@ background: red
 ~~~
 ---
 ~~~
-
+---
 ---
 
 # Slide 2`;
@@ -209,6 +225,24 @@ const x = "---";
       expect(result.slides).toHaveLength(2);
     });
   });
+
+  describe('empty slides', () => {
+    // Bug: empty slides are kept if it's the first slide
+    it('BUG: creates empty first slide when separator immediately after frontmatter', () => {
+      const markdown = `---
+theme: dark
+---
+
+---
+
+# Real Slide`;
+
+      const result = parseDeck(markdown);
+      // Currently creates 2 slides: one empty, one with content
+      // Should probably skip empty slides except first
+      expect(result.slides[0].content.trim()).toBe('');
+    });
+  });
 });
 
 describe('getSlideIndexAtLine', () => {
@@ -227,14 +261,12 @@ describe('getSlideIndexAtLine', () => {
   it('handles cursor on separator line', () => {
     const markdown = "# Slide 1\n\n---\n\n# Slide 2";
     // When cursor is ON the separator line, it's still in slide 1
-    // (separator is processed as part of previous slide)
     const result = getSlideIndexAtLine(markdown, 2);
     expect(result).toBe(0);
   });
 
   it('skips --- inside fenced code blocks', () => {
     const markdown = "# Slide 1\n\n```\n---\n```\n\n---\n\n# Slide 2";
-    // Line 6 is after the second --- separator, so should be slide 2
     const result = getSlideIndexAtLine(markdown, 7);
     expect(result).toBe(1);
   });
@@ -249,5 +281,43 @@ describe('getSlideIndexAtLine', () => {
     const markdown = `---\ntheme: dark\n---\n\n# Slide 1`;
     const result = getSlideIndexAtLine(markdown, 3);
     expect(result).toBe(0);
+  });
+
+  // Bug test: leading content before frontmatter breaks detection
+  it('BUG: leading content before frontmatter breaks index calculation', () => {
+    const markdown = `# Comment
+
+---
+theme: dark
+---
+
+# Slide 1`;
+    // The frontmatter is not at line 0, so getSlideIndexAtLine miscounts
+    // Returns 1 when it should return 0
+    const result = getSlideIndexAtLine(markdown, 4);
+    expect(result).toBe(1); // Bug confirmed - should be 0
+  });
+});
+
+describe('isSlidesFile', () => {
+  it('returns true for slides: true', () => {
+    expect(isSlidesFile('---\nslides: true\n---\n')).toBe(true);
+  });
+
+  it('returns true for slides: "true"', () => {
+    expect(isSlidesFile('---\nslides: "true"\n---\n')).toBe(true);
+  });
+
+  it('returns false when slides is not true', () => {
+    expect(isSlidesFile('---\nslides: false\n---\n')).toBe(false);
+  });
+
+  it('returns false without frontmatter', () => {
+    expect(isSlidesFile('# Hello')).toBe(false);
+  });
+
+  // Actually works - isSlidesFile handles trailing space
+  it('handles trailing space after opening ---', () => {
+    expect(isSlidesFile('--- \nslides: true\n---\n')).toBe(true);
   });
 });

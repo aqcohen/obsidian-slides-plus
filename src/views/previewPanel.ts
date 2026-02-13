@@ -23,6 +23,7 @@ export class PreviewPanel extends ItemView {
   private slideComponent: Component | null = null;
   private slideContainer: HTMLElement | null = null;
   private slideCounter: HTMLElement | null = null;
+  private cursorPoller: number | null = null;
 
   constructor(leaf: WorkspaceLeaf) {
     super(leaf);
@@ -86,15 +87,18 @@ export class PreviewPanel extends ItemView {
 
     // Register cursor activity via interval polling
     // (Obsidian doesn't have a direct cursor-change event for plugins)
-    this.registerInterval(
-      window.setInterval(() => this.syncCursorPosition(), 300)
-    );
+    this.cursorPoller = window.setInterval(() => this.syncCursorPosition(), 300);
+    this.registerInterval(this.cursorPoller);
 
     // Initial render
     this.onActiveLeafChange();
   }
 
   async onClose(): Promise<void> {
+    if (this.cursorPoller !== null) {
+      window.clearInterval(this.cursorPoller);
+      this.cursorPoller = null;
+    }
     this.cleanupSlide();
     this.themeEngine.destroy();
   }
