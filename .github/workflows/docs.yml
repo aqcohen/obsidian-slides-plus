@@ -28,18 +28,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd website
+          cd docs
           npm ci
 
       - name: Build website
         run: |
-          cd website
+          cd docs
           npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: website/build
+          path: docs/build
 
   deploy:
     needs: build
