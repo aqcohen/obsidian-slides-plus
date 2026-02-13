@@ -17,7 +17,7 @@ import {
  * - Speaker notes: <!-- ... --> HTML comments
  */
 export function parseDeck(markdown: string): SlidesDeck {
-  const normalized = markdown.replace(/\r\n/g, "\n");
+  const normalized = markdown.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
   const { globalFrontmatter, body } = extractGlobalFrontmatter(normalized);
   const globalConfig = parseGlobalConfig(globalFrontmatter);
   const rawSlides = parseSlides(body);
