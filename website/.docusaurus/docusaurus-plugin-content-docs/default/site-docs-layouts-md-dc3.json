@@ -1,0 +1,25 @@
+{
+  "id": "layouts",
+  "title": "Layouts",
+  "description": "Slides Plus provides multiple layouts for different slide types.",
+  "source": "@site/docs/layouts.md",
+  "sourceDirName": ".",
+  "slug": "/layouts",
+  "permalink": "/obsidian-slides-plus/layouts",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055000,
+  "frontMatter": {},
+  "sidebar": "docs",
+  "previous": {
+    "title": "Themes",
+    "permalink": "/obsidian-slides-plus/themes"
+  },
+  "next": {
+    "title": "Frontmatter Reference",
+    "permalink": "/obsidian-slides-plus/frontmatter"
+  }
+}

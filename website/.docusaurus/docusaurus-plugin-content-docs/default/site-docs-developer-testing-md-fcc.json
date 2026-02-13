@@ -1,0 +1,25 @@
+{
+  "id": "developer/testing",
+  "title": "Testing Guide",
+  "description": "Slides Plus uses Vitest for testing. This guide covers writing tests.",
+  "source": "@site/docs/developer/testing.md",
+  "sourceDirName": "developer",
+  "slug": "/developer/testing",
+  "permalink": "/obsidian-slides-plus/developer/testing",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055000,
+  "frontMatter": {},
+  "sidebar": "developer",
+  "previous": {
+    "title": "Extending Slides Plus",
+    "permalink": "/obsidian-slides-plus/developer/extending"
+  },
+  "next": {
+    "title": "Contributing to Slides Plus",
+    "permalink": "/obsidian-slides-plus/developer/contributing"
+  }
+}

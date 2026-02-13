@@ -1,0 +1,129 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/obsidian-slides-plus/",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/obsidian-slides-plus/",
+          "mainDocId": "intro",
+          "docs": [
+            {
+              "id": "api/parser",
+              "path": "/obsidian-slides-plus/api/parser",
+              "sidebar": "api"
+            },
+            {
+              "id": "api/render-engine",
+              "path": "/obsidian-slides-plus/api/render-engine",
+              "sidebar": "api"
+            },
+            {
+              "id": "api/types",
+              "path": "/obsidian-slides-plus/api/types",
+              "sidebar": "api"
+            },
+            {
+              "id": "developer/architecture",
+              "path": "/obsidian-slides-plus/developer/architecture",
+              "sidebar": "developer"
+            },
+            {
+              "id": "developer/contributing",
+              "path": "/obsidian-slides-plus/developer/contributing",
+              "sidebar": "developer"
+            },
+            {
+              "id": "developer/extending",
+              "path": "/obsidian-slides-plus/developer/extending",
+              "sidebar": "developer"
+            },
+            {
+              "id": "developer/intro",
+              "path": "/obsidian-slides-plus/developer/intro",
+              "sidebar": "developer"
+            },
+            {
+              "id": "developer/setup",
+              "path": "/obsidian-slides-plus/developer/setup",
+              "sidebar": "developer"
+            },
+            {
+              "id": "developer/testing",
+              "path": "/obsidian-slides-plus/developer/testing",
+              "sidebar": "developer"
+            },
+            {
+              "id": "export",
+              "path": "/obsidian-slides-plus/export",
+              "sidebar": "docs"
+            },
+            {
+              "id": "features",
+              "path": "/obsidian-slides-plus/features",
+              "sidebar": "docs"
+            },
+            {
+              "id": "frontmatter",
+              "path": "/obsidian-slides-plus/frontmatter",
+              "sidebar": "docs"
+            },
+            {
+              "id": "getting-started",
+              "path": "/obsidian-slides-plus/getting-started",
+              "sidebar": "docs"
+            },
+            {
+              "id": "integrations",
+              "path": "/obsidian-slides-plus/integrations",
+              "sidebar": "docs"
+            },
+            {
+              "id": "intro",
+              "path": "/obsidian-slides-plus/intro",
+              "sidebar": "docs"
+            },
+            {
+              "id": "layouts",
+              "path": "/obsidian-slides-plus/layouts",
+              "sidebar": "docs"
+            },
+            {
+              "id": "roadmap",
+              "path": "/obsidian-slides-plus/roadmap"
+            },
+            {
+              "id": "themes",
+              "path": "/obsidian-slides-plus/themes",
+              "sidebar": "docs"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "docs": {
+              "link": {
+                "path": "/obsidian-slides-plus/intro",
+                "label": "intro"
+              }
+            },
+            "developer": {
+              "link": {
+                "path": "/obsidian-slides-plus/developer/intro",
+                "label": "developer/intro"
+              }
+            },
+            "api": {
+              "link": {
+                "path": "/obsidian-slides-plus/api/types",
+                "label": "api/types"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

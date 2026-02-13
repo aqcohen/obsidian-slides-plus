@@ -35,7 +35,7 @@ Slides Plus transforms your Markdown notes into beautiful, interactive presentat
 - **Obsidian users** who want to create presentations without leaving their note-taking workflow
 - **Developers** who prefer writing presentations in Markdown
 - **Technical writers** who need Mermaid diagrams, code blocks, and LaTeX math
-- ** educators** who want to create academic presentations with beautiful typography
+- **Educators** who want to create academic presentations with beautiful typography
 
 ## Quick Example
 

@@ -4,11 +4,18 @@ The future of Slides Plus.
 
 ## Version History
 
-### v0.1.x - Foundation
+### v0.1.x - Foundation (Current)
 - Initial release
 - Core presentation features
-- Basic themes and layouts
+- 6 built-in themes (Obsidian, Midnight, Paper, Boardroom, Academic, Studio)
+- 9 layout types (default, cover, center, two-cols, image-right, image-left, section, quote, full)
 - Integrations (Mermaid, LaTeX, Excalidraw)
+- Live preview panel
+- Presenter view with timer
+- PDF export
+- Slide navigator
+- Reading view separators
+- Unit tests (94%+ coverage)
 
 ### v0.2.0 - Custom Themes (Planned)
 - User-created themes
@@ -18,7 +25,7 @@ The future of Slides Plus.
 ### v1.0.0 - Production Ready
 - Complete test coverage
 - Stable API
-- Comprehensive documentation
+- Community feedback incorporation
 
 ## Feature Roadmap
 
@@ -51,7 +58,7 @@ The future of Slides Plus.
 
 1. Features freeze for release
 2. Bug fix phase
-3. Testing
+3. Testing (must pass 80% coverage)
 4. Release candidate
 5. Stable release
 
