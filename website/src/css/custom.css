@@ -1,0 +1,67 @@
+/**
+ * Slides Plus - Custom CSS
+ * 
+ * Add your custom styles here.
+ * These will be loaded in addition to the built-in themes.
+ */
+
+/* 
+ * Example: Custom animations
+ * 
+ * .sp-slide {
+ *   animation: my-fade-in 0.5s ease;
+ * }
+ * 
+ * @keyframes my-fade-in {
+ *   from { opacity: 0; transform: translateY(20px); }
+ *   to { opacity: 1; transform: translateY(0); }
+ * }
+ */
+
+/* 
+ * Example: Custom background
+ * 
+ * .sp-slide.custom-bg {
+ *   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ * }
+ */
+
+/*
+ * Example: Override theme colors
+ *
+ * :root {
+ *   --sp-accent: #your-color;
+ * }
+ */
+
+/* 
+ * Add your custom CSS below this line 
+ */
+
+/* 
+ * Example: Custom slide numbers
+ *
+ * .sp-slide-number {
+ *   font-size: 14px;
+ *   color: #888;
+ * }
+ */
+
+/*
+ * Example: Custom fonts
+ *
+ * .sp-slide {
+ *   font-family: 'Your Font', sans-serif;
+ * }
+ */
+
+/*
+ * Example: Custom layout
+ *
+ * .sp-layout-custom {
+ *   display: flex;
+ *   flex-direction: column;
+ *   justify-content: center;
+ *   align-items: center;
+ * }
+ */
