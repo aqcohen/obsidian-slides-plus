@@ -61,6 +61,10 @@ export class SlideNavigator extends ItemView {
   }
 
   async onClose(): Promise<void> {
+    if (this.refreshTimeout) {
+      clearTimeout(this.refreshTimeout);
+      this.refreshTimeout = null;
+    }
     this.cleanupComponents();
   }
 
