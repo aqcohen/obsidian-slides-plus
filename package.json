@@ -1,7 +1,7 @@
 {
   "name": "obsidian-slides-plus",
-  "version": "0.1.10",
-  "description": "Slidev-inspired presentations inside Obsidian. Themes, layouts, transitions, presenter view, PDF export, and Excalidraw/Mermaid/LaTeX support.",
+  "version": "0.1.11",
+  "description": "Beautiful presentations from your Obsidian notes. Themes, layouts, transitions, presenter view, PDF export, and Excalidraw/Mermaid/LaTeX support.",
   "main": "main.js",
   "repository": {
     "type": "git",

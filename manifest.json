@@ -1,9 +1,9 @@
 {
   "id": "obsidian-slides-plus",
   "name": "Slides Plus",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "minAppVersion": "1.4.0",
-  "description": "Slidev-inspired presentations inside Obsidian. 6 themes, layouts, transitions, speaker notes, presenter view, PDF export, and Excalidraw/Mermaid/LaTeX support.",
+  "description": "Beautiful presentations from your Obsidian notes. 6 themes, layouts, transitions, speaker notes, presenter view, PDF export, and Excalidraw/Mermaid/LaTeX support.",
   "author": "aqcohen",
   "authorUrl": "https://github.com/aqcohen",
   "isDesktopOnly": true

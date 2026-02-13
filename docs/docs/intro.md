@@ -1,6 +1,6 @@
 # Introduction
 
-Welcome to **Slides Plus**, a powerful presentation plugin for Obsidian that brings the best of [Slidev](https://sli.dev/) to your note-taking workflow.
+Welcome to **Slides Plus**, a powerful presentation plugin for Obsidian that transforms your Markdown notes into beautiful presentations.
 
 ## What is Slides Plus?
 

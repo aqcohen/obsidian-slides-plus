@@ -7,7 +7,7 @@ import Link from '@docusaurus/Link';
 
 # Welcome to Slides Plus
 
-**Slides Plus** is a powerful presentation plugin for Obsidian that brings the best of [Slidev](https://sli.dev/) to your note-taking workflow.
+**Slides Plus** is a powerful presentation plugin for Obsidian that transforms your Markdown notes into beautiful presentations.
 
 ## Quick Links
 

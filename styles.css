@@ -1447,23 +1447,29 @@
 
 .sp-slide-header {
   position: absolute;
-  top: 12px;
+  top: 16px;
   right: 16px;
-  font-size: 0.65em;
-  color: var(--sp-slide-muted);
-  text-transform: uppercase;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 0.6em;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #9a948a;
+  line-height: 1.3;
   pointer-events: none;
 }
 
 .sp-slide-footer {
   position: absolute;
-  bottom: 12px;
+  bottom: 16px;
   left: 16px;
-  font-size: 0.65em;
-  color: var(--sp-slide-muted);
-  text-transform: uppercase;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 0.6em;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #9a948a;
+  line-height: 1.3;
   pointer-events: none;
 }
 

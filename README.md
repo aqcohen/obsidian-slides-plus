@@ -1,11 +1,11 @@
 # Slides Plus
 
-Slidev-inspired presentations inside Obsidian. Write your slides in Markdown, preview them live, and present directly from your vault.
+Beautiful presentations from your Obsidian notes. Write your slides in Markdown, preview them live, and present directly from your vault.
 
 ## Features
 
 - **Markdown slides** — Use `---` separators to split your notes into slides. Add `slides: true` to your frontmatter to activate.
-- **6 themes** — Default, Dark, Minimal, Corporate, Academic (Anthropic-inspired), and Creative. Set via frontmatter or settings.
+- **6 themes** — Obsidian, Midnight, Paper, Boardroom, Academic, and Studio. Set via frontmatter or settings.
 - **Layouts** — Cover, center, two-cols, image-right, image-left, section, quote, and full bleed.
 - **Transitions** — Slide, fade, slide-up, or none. Configurable per-slide.
 - **Presenter view** — Current slide, next slide preview, speaker notes, and a timer.
@@ -13,6 +13,27 @@ Slidev-inspired presentations inside Obsidian. Write your slides in Markdown, pr
 - **PDF export** — Export to self-contained HTML, open in browser, and print/save as PDF. Supports dark mode, LaTeX, and Mermaid.
 - **Live preview** — Sidebar panel updates as you type.
 - **Per-slide styling** — Override any design token via frontmatter (`sp-slide-bg`, `sp-slide-accent`, `sp-font-heading`, etc.).
+
+## Screenshots
+
+### Academic Theme (Light)
+
+| | |
+|---|---|
+| ![Academic Theme Light](images/academic-light-theme.png) | ![Tables Light](images/academic-tables-light.png) |
+| ![Code Highlighting Light](images/academic-syntax-hightligh-light.png) | ![Dynamic Highlights Light](images/academic-syntax-dynamic-hightligh-light.png) |
+| ![Excalidraw Light](images/academic-excalidraw-light.png) | |
+
+### Academic Theme (Dark)
+
+| | |
+|---|---|
+| ![Academic Theme Dark](images/academic-dark-theme.png) | ![Tables Dark](images/academic-tables-dark.png) |
+| ![Static Highlights Dark](images/academic-syntax-static-hightligh-dark.png) | ![Dynamic Highlights Dark](images/academic-syntax-dynamic-hightligh-dark.png) |
+| ![Excalidraw Dark](images/academic-excalidraw-dark.png) | ![Mermaid Dark](images/academic-mermaid-dark.png) |
+| ![LaTeX Dark](images/academic-latex-dark.png) | ![Theorem Callout Dark](images/academic-theorem-callout-dark.png) |
+| ![Columns Dark](images/academic-columns-dark.png) | ![Centered Sections Dark](images/academic-centered-sections-dark.png) |
+| ![Footnotes Dark](images/academic-footnotes-dark.png) | |
 
 ## Integrations
 
