@@ -250,6 +250,14 @@ function parseGlobalConfig(
       typeof frontmatter.highlightStyle === "string"
         ? frontmatter.highlightStyle
         : DEFAULT_DECK_CONFIG.highlightStyle,
+    header:
+      typeof frontmatter.header === "string"
+        ? frontmatter.header
+        : undefined,
+    footer:
+      typeof frontmatter.footer === "string"
+        ? frontmatter.footer
+        : undefined,
   };
 }
 

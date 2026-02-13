@@ -64,6 +64,14 @@ export class SlideRenderEngine {
     // Apply aspect ratio
     slideEl.style.aspectRatio = deckConfig.aspectRatio;
 
+    // Header / footer from deck config
+    if (deckConfig.header) {
+      slideEl.createDiv({ cls: "sp-slide-header", text: deckConfig.header });
+    }
+    if (deckConfig.footer) {
+      slideEl.createDiv({ cls: "sp-slide-footer", text: deckConfig.footer });
+    }
+
     // Parse content for slot syntax and render
     const layout = slide.frontmatter.layout || "default";
     const slots = renderSlots(slide.content, layout);
@@ -92,6 +100,16 @@ export class SlideRenderEngine {
       }
     }
 
+    // Apply custom column ratio for two-cols layout
+    if (layout === "two-cols" && slide.frontmatter.cols) {
+      const parts = slide.frontmatter.cols.split(/\s+/);
+      const a = parseFloat(parts[0]);
+      const b = parseFloat(parts[1]);
+      if (!isNaN(a) && !isNaN(b)) {
+        slideEl.style.gridTemplateColumns = `${a}fr ${b}fr`;
+      }
+    }
+
     // Handle image layouts
     if (
       (layout === "image-right" || layout === "image-left") &&
@@ -107,8 +125,16 @@ export class SlideRenderEngine {
     // Post-render: resolve integrations
     await this.runPostRenderHooks(slideEl, allExcalidrawEmbeds);
 
+    // Process citation references: [@author] → styled spans
+    this.processCitations(slideEl);
+
     // Tag fragments: list items (if fragments: true) and code step markers (always)
     this.applyFragments(slideEl, !!slide.frontmatter.fragments);
+
+    // Auto-fit text: shrink font-size if content overflows
+    if (slide.frontmatter["text-size"] === "auto") {
+      setTimeout(() => this.autoFitText(slideEl), 0);
+    }
 
     return component;
   }
@@ -294,6 +320,79 @@ export class SlideRenderEngine {
    */
   private resolveFont(value: string): string {
     return FONT_PRESETS[value] || value;
+  }
+
+  /**
+   * Find [@...] citation references in text nodes and wrap in styled spans.
+   * Skips code/pre elements.
+   */
+  private processCitations(container: HTMLElement): void {
+    const walker = document.createTreeWalker(
+      container,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          if (!parent) return NodeFilter.FILTER_REJECT;
+          if (
+            parent.tagName === "CODE" ||
+            parent.tagName === "PRE" ||
+            parent.closest("code, pre")
+          ) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      }
+    );
+
+    const matches: { node: Text; index: number; length: number; text: string }[] = [];
+    const citationPattern = /\[@[\w\d,;\s]+\]/g;
+
+    let textNode: Text | null;
+    while ((textNode = walker.nextNode() as Text | null)) {
+      let match: RegExpExecArray | null;
+      citationPattern.lastIndex = 0;
+      while ((match = citationPattern.exec(textNode.data)) !== null) {
+        matches.push({
+          node: textNode,
+          index: match.index,
+          length: match[0].length,
+          text: match[0],
+        });
+      }
+    }
+
+    // Process in reverse to preserve indices
+    for (let i = matches.length - 1; i >= 0; i--) {
+      const { node, index, length, text } = matches[i];
+      const before = node.data.slice(0, index);
+      const after = node.data.slice(index + length);
+
+      const span = document.createElement("span");
+      span.className = "sp-citation";
+      span.textContent = text;
+
+      node.data = before;
+      const afterNode = document.createTextNode(after);
+      node.parentNode!.insertBefore(span, node.nextSibling);
+      node.parentNode!.insertBefore(afterNode, span.nextSibling);
+    }
+  }
+
+  /**
+   * Shrink font-size until content no longer overflows.
+   * Min 0.5em, step 0.05em.
+   */
+  private autoFitText(slideEl: HTMLElement): void {
+    let size = parseFloat(getComputedStyle(slideEl).fontSize);
+    const min = size * 0.5;
+    const step = size * 0.05;
+
+    while (slideEl.scrollHeight > slideEl.clientHeight && size > min) {
+      size -= step;
+      slideEl.style.fontSize = `${size}px`;
+    }
   }
 
   private applyBackground(

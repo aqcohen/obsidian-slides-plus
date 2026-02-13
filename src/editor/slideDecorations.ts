@@ -117,6 +117,14 @@ export const slideSeparatorPlugin = ViewPlugin.fromClass(
             i++;
           }
         } else {
+          // Decorate single-line speaker note comments
+          if (trimmed.startsWith("<!--") && trimmed.endsWith("-->")) {
+            builder.add(
+              line.from,
+              line.from,
+              Decoration.line({ attributes: { class: "sp-editor-note-line" } })
+            );
+          }
           i++;
         }
       }

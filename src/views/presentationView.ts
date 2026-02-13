@@ -22,6 +22,7 @@ export class PresentationView extends ItemView {
   private transitionEngine: TransitionEngine;
   private themeEngine: ThemeEngine;
   private slideArea: HTMLElement | null = null;
+  private keyboardOverlay: HTMLElement | null = null;
   private slideComponents: Component[] = [];
   private boundKeyHandler: (e: KeyboardEvent) => void;
 
@@ -59,6 +60,25 @@ export class PresentationView extends ItemView {
     contentEl.createDiv({ cls: "sp-progress-bar" }).createDiv({
       cls: "sp-progress-fill",
     });
+
+    // Keyboard shortcuts overlay
+    this.keyboardOverlay = contentEl.createDiv({ cls: "sp-keyboard-overlay" });
+    const card = this.keyboardOverlay.createDiv({ cls: "sp-keyboard-overlay-card" });
+    card.createEl("h3", { text: "Keyboard Shortcuts" });
+    const grid = card.createDiv({ cls: "sp-keyboard-grid" });
+    const shortcuts: [string, string][] = [
+      ["\u2192 / Space", "Next slide"],
+      ["\u2190", "Previous slide"],
+      ["Home", "First slide"],
+      ["End", "Last slide"],
+      ["f", "Toggle fullscreen"],
+      ["Esc", "Exit presentation"],
+      ["?", "Toggle this help"],
+    ];
+    for (const [key, desc] of shortcuts) {
+      grid.createEl("kbd", { text: key });
+      grid.createEl("span", { text: desc });
+    }
 
     // Keyboard navigation
     document.addEventListener("keydown", this.boundKeyHandler);
@@ -109,8 +129,17 @@ export class PresentationView extends ItemView {
     }
   }
 
+  private toggleKeyboardOverlay(): void {
+    this.keyboardOverlay?.classList.toggle("sp-keyboard-overlay-visible");
+  }
+
+  private dismissKeyboardOverlay(): void {
+    this.keyboardOverlay?.classList.remove("sp-keyboard-overlay-visible");
+  }
+
   private async navigate(delta: number): Promise<void> {
     if (!this.deck) return;
+    this.dismissKeyboardOverlay();
 
     if (delta > 0) {
       const fragCount = this.getFragmentCount();
@@ -221,12 +250,17 @@ export class PresentationView extends ItemView {
         e.preventDefault();
         this.toggleFullscreen();
         break;
+      case "?":
+        e.preventDefault();
+        this.toggleKeyboardOverlay();
+        break;
     }
   }
 
   private async goToSlide(index: number): Promise<void> {
     if (!this.deck) return;
     if (index < 0 || index >= this.deck.slides.length) return;
+    this.dismissKeyboardOverlay();
     const direction = index > this.currentIndex ? "forward" : "backward";
     this.currentIndex = index;
     this.fragmentStep = 0;

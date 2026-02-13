@@ -189,7 +189,7 @@ export class PreviewPanel extends ItemView {
 
   private updateCounter(): void {
     if (!this.slideCounter || !this.currentDeck) return;
-    this.slideCounter.textContent = `${this.currentSlideIndex + 1} / ${this.currentDeck.slides.length}`;
+    this.slideCounter.textContent = `Slide ${this.currentSlideIndex + 1} of ${this.currentDeck.slides.length}`;
   }
 
   private showPlaceholder(message: string): void {

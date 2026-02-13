@@ -230,7 +230,7 @@ export class PresenterView extends ItemView {
 
   private updateCounter(): void {
     if (!this.counterEl || !this.deck) return;
-    this.counterEl.textContent = `${this.currentIndex + 1} / ${this.deck.slides.length}`;
+    this.counterEl.textContent = `Slide ${this.currentIndex + 1} of ${this.deck.slides.length}`;
   }
 
   private cleanupComponents(): void {

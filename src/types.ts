@@ -8,6 +8,8 @@ export interface DeckConfig {
   transition: TransitionType;
   aspectRatio: string;
   highlightStyle: string;
+  header?: string;
+  footer?: string;
 }
 
 export interface Slide {
@@ -29,12 +31,15 @@ export interface SlideFrontmatter {
   "background-color"?: string;      // Override background color
   "accent-color"?: string;          // Accent color for highlights
   "text-color"?: string;            // Text color
-  "text-size"?: "small" | "normal" | "large" | "huge";
+  "text-size"?: "small" | "normal" | "large" | "huge" | "auto";
   "text-align"?: "left" | "center" | "right";
   "heading-font"?: string;          // Font preset or font-family name
   "body-font"?: string;             // Font preset or font-family name
   padding?: "none" | "small" | "normal" | "large";
   
+  // Multi-column ratio for two-cols layout
+  cols?: string;                    // e.g. "2 1" → 2fr 1fr
+
   // Power user escape hatch
   "custom-css"?: string;            // Raw CSS for advanced users
   
