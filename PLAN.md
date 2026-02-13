@@ -2,7 +2,7 @@
 
 ## Overview
 
-A Slidev-inspired presentation plugin for Obsidian with hybrid authoring (Markdown + live visual preview), core Google Slides features, and native support for Excalidraw, Mermaid, and LaTeX.
+A Slidev-inspired an opiniated presentation plugin for Obsidian with hybrid authoring (Markdown + live visual preview), core Google Slides features, and native support for Excalidraw, Mermaid, and LaTeX.
 
 **Plugin name:** `obsidian-slides-plus`
 
